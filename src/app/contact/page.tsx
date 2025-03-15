@@ -1,25 +1,17 @@
-import Breadcrumb from "@/components/Common/Breadcrumb";
 import Contact from "@/components/Contact";
-
+import ScrollUp from "@/components/Common/ScrollUp";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact Page | Free Next.js Template for Startup and SaaS",
-  description: "This is Contact Page for Startup Nextjs Template",
-  // other metadata
+  title: "Contact Paloma - Cloud-Based ERP & POS Solution",
+  description: "Get in touch with our team and learn how our ERP solution can help transform your business",
 };
 
-const ContactPage = () => {
+export default function ContactPage() {
   return (
     <>
-      <Breadcrumb
-        pageName="Contact Page"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius eros eget sapien consectetur ultrices. Ut quis dapibus libero."
-      />
-
+      <ScrollUp />
       <Contact />
     </>
   );
-};
-
-export default ContactPage;
+}

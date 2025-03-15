@@ -9,13 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.7.2",
+    "@mdi/font": "^7.4.47",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^3.0.2",
+    "better-sqlite3": "^11.9.0",
     "eslint": "^8.56.0",
     "eslint-config-next": "15.1.6",
+    "mysql2": "^3.13.0",
     "next": "15.1.6",
     "next-themes": "^0.2.1",
+    "promise-mysql": "^5.2.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-modal-video": "^2.0.1"
+    "react-modal-video": "^2.0.1",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@types/node": "^20.8.9",

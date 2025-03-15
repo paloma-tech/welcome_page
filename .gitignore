@@ -10,13 +10,14 @@
 
 # next.js
 /.next/
-/out/
+out/
 
 # production
 /build
 
 # misc
 .DS_Store
+Thumbs.db
 *.pem
 
 # debug
@@ -26,7 +27,11 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
+.env.local
 .env*.local
 
 # vercel
 .vercel
+
+# IDE
+.idea/
