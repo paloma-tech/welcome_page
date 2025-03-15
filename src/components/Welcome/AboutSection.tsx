@@ -600,7 +600,7 @@ const AboutSection = () => {
                   Who we are
                 </span>
                 <h2 className="mb-8 text-3xl font-bold text-black dark:text-white sm:text-4xl lg:text-3xl xl:text-4xl">
-                  Our POS system integrates seamlessly with our cloud-based ERP to give you full control over sales, inventory, and financials
+                  Our POS simplifies sales, tracks inventory, and streamlines operations
                 </h2>
               </div>
               <p className="mb-10 text-base leading-relaxed text-body-color dark:text-body-color-dark">

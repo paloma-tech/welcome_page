@@ -11,7 +11,7 @@ const WelcomeHero = () => {
                 Empower Your Business with Our Cloud-Optional ERP & POS Solution
               </div>
               <p className="mb-12 text-base leading-relaxed text-body-color dark:text-body-color-dark sm:text-lg md:text-xl">
-                Effortlessly manage sales, inventory, and operations with our cutting-edge cloud-based ERP system
+                Effortlessly manage sales, inventory, and operations with our cutting-edge cloud-optional ERP system
               </p>
               
               {/* Mobile-responsive button container */}
