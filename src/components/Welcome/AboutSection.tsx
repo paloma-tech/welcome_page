@@ -3,11 +3,11 @@ import Image from "next/image";
 
 const AboutSection = () => {
   return (
-    <section className="py-16 md:py-20 lg:py-28 bg-white dark:bg-gray-dark">
+    <section className="bg-white py-16 dark:bg-gray-dark md:py-20 lg:py-28">
       <div className="container">
-        <div className="flex flex-wrap items-center -mx-4">
+        <div className="-mx-4 flex flex-wrap items-center">
           {/* Image Column */}
-          <div className="w-full px-4 lg:w-1/2 relative">
+          <div className="relative w-full px-4 lg:w-1/2">
             <div className="wow fadeInUp -mb-20 lg:mb-0" data-wow-delay=".15s">
               <div className="relative mx-auto aspect-[25/24] max-w-[500px]">
                 <Image
@@ -18,7 +18,7 @@ const AboutSection = () => {
                   className="mx-auto rounded-md"
                 />
                 {/* Decorative elements */}
-                <div className="absolute -top-6 -left-6 z-[-1] opacity-30 lg:opacity-100">
+                <div className="absolute -left-6 -top-6 z-[-1] opacity-30 lg:opacity-100">
                   <svg
                     width="134"
                     height="106"
@@ -591,20 +591,26 @@ const AboutSection = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Content Column */}
           <div className="w-full px-4 lg:w-1/2">
-            <div className="wow fadeInUp text-center lg:text-left" data-wow-delay=".2s">
+            <div
+              className="wow fadeInUp text-center lg:text-left"
+              data-wow-delay=".2s"
+            >
               <div className="mb-4">
                 <span className="mb-2 block text-lg font-semibold text-primary">
                   Who we are
                 </span>
                 <h2 className="mb-8 text-3xl font-bold text-black dark:text-white sm:text-4xl lg:text-3xl xl:text-4xl">
-                  Our POS simplifies sales, tracks inventory, and streamlines operations
+                  Our POS simplifies sales, tracks inventory, and streamlines
+                  operations
                 </h2>
               </div>
               <p className="mb-10 text-base leading-relaxed text-body-color dark:text-body-color-dark">
-                With Paloma's integrated ERP solution, you can monitor your business operations from anywhere, streamline your processes, and make data-driven decisions that drive growth and efficiency.
+                {
+                  "With Paloma's integrated ERP solution, you can monitor your business operations from anywhere, streamline your processes, and make data-driven decisions that drive growth and efficiency."
+                }
               </p>
             </div>
           </div>

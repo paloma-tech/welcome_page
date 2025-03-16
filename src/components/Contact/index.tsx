@@ -29,11 +29,11 @@ const Contact = () => {
   // Animation handler
   useEffect(() => {
     const animateElements = () => {
-      document.querySelectorAll('.elementor-invisible').forEach((element) => {
+      document.querySelectorAll(".elementor-invisible").forEach((element) => {
         if (isElementInViewport(element)) {
-          element.classList.remove('elementor-invisible');
-          element.classList.add('elementor-visible');
-          const animation = element.getAttribute('data-animation');
+          element.classList.remove("elementor-invisible");
+          element.classList.add("elementor-visible");
+          const animation = element.getAttribute("data-animation");
           if (animation) {
             element.classList.add(animation);
           }
@@ -44,19 +44,20 @@ const Contact = () => {
     const isElementInViewport = (el: Element) => {
       const rect = el.getBoundingClientRect();
       return (
-        rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.top <=
+          (window.innerHeight || document.documentElement.clientHeight) &&
         rect.bottom >= 0
       );
     };
 
-    window.addEventListener('scroll', animateElements);
+    window.addEventListener("scroll", animateElements);
     animateElements(); // Initial check
 
-    return () => window.removeEventListener('scroll', animateElements);
+    return () => window.removeEventListener("scroll", animateElements);
   }, []);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -120,7 +121,11 @@ const Contact = () => {
                   Contact us
                 </h1>
               </div>
-              <div data-animation="fadeInUp" className="elementor-invisible" style={{ animationDelay: "200ms" }}>
+              <div
+                data-animation="fadeInUp"
+                className="elementor-invisible"
+                style={{ animationDelay: "200ms" }}
+              >
                 <h4 className="text-lg font-medium text-body-color dark:text-body-color-dark">
                   Get in touch and let us know how we can help.
                 </h4>
@@ -136,12 +141,16 @@ const Contact = () => {
           <div className="flex flex-wrap">
             {/* Form Column */}
             <div className="w-full px-4 lg:w-7/12 xl:w-8/12">
-              <div data-animation="fadeIn" className="elementor-invisible mb-12 rounded-sm bg-white px-8 py-11 shadow-three dark:bg-gray-dark sm:p-[55px] lg:mb-5 lg:px-8 xl:p-[55px]">
+              <div
+                data-animation="fadeIn"
+                className="elementor-invisible mb-12 rounded-sm bg-white px-8 py-11 shadow-three dark:bg-gray-dark sm:p-[55px] lg:mb-5 lg:px-8 xl:p-[55px]"
+              >
                 <h2 className="mb-3 text-2xl font-bold text-black dark:text-white sm:text-3xl lg:text-2xl xl:text-3xl">
                   Send us a message
                 </h2>
                 <p className="mb-12 text-base font-medium text-body-color">
-                  Our team is here to help you optimize your business operations and enhance your point of sale experience.
+                  Our team is here to help you optimize your business operations
+                  and enhance your point of sale experience.
                 </p>
 
                 {formStatus.type && (
@@ -238,7 +247,7 @@ const Contact = () => {
                         type="submit"
                         disabled={isSubmitting}
                         className={`rounded-sm bg-primary px-9 py-4 text-base font-medium text-white shadow-submit duration-300 hover:bg-primary/90 dark:shadow-submit-dark ${
-                          isSubmitting ? "opacity-75 cursor-not-allowed" : ""
+                          isSubmitting ? "cursor-not-allowed opacity-75" : ""
                         }`}
                       >
                         {isSubmitting ? "Sending..." : "Send Message"}
@@ -250,13 +259,18 @@ const Contact = () => {
             </div>
 
             {/* Contact Info Column */}
-            <div data-animation="fadeInRight" className="elementor-invisible w-full px-4 lg:w-5/12 xl:w-4/12">
+            <div
+              data-animation="fadeInRight"
+              className="elementor-invisible w-full px-4 lg:w-5/12 xl:w-4/12"
+            >
               <div className="mb-12 rounded-sm bg-white px-8 py-11 shadow-three dark:bg-gray-dark sm:p-[55px] lg:mb-5 lg:px-8 xl:p-[55px]">
                 <h2 className="mb-3 text-2xl font-bold text-black dark:text-white">
                   Get in touch
                 </h2>
                 <p className="mb-12 text-base font-medium text-body-color">
-                  Have a question about our ERP Point of Sale system? We're here to provide you with the best support possible.
+                  {
+                    "Have a question about our ERP Point of Sale system? We're here to provide you with the best support possible."
+                  }
                 </p>
 
                 <div className="mb-8 flex w-full max-w-[370px] items-center">
@@ -285,10 +299,16 @@ const Contact = () => {
                       Call Us
                     </h4>
                     <div className="text-base text-body-color dark:text-body-color-dark">
-                      <a href="tel:+21692530875" className="hover:text-primary block">
+                      <a
+                        href="tel:+21692530875"
+                        className="block hover:text-primary"
+                      >
                         +216 92 530 875
                       </a>
-                      <a href="tel:+21690656399" className="hover:text-primary block">
+                      <a
+                        href="tel:+21690656399"
+                        className="block hover:text-primary"
+                      >
                         +216 90 656 399
                       </a>
                     </div>
