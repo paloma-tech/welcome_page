@@ -6,8 +6,6 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-    ports:
-      - "3000:3000"
     command: sh -c "bun install && bun run build && bun start"
     depends_on:
       - db
@@ -25,11 +23,8 @@ services:
       MYSQL_DATABASE: nextjsdb
       MYSQL_USER: user
       MYSQL_PASSWORD: superpowerfuldbpassword
-    ports:
-      - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
 
 volumes:
   db_data:
- 
