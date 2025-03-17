@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 interface FormData {
   name: string;
@@ -66,48 +66,38 @@ const Contact = () => {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setIsSubmitting(true);
-    setFormStatus({ type: null, message: "" });
 
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+    const formData = new FormData(e.currentTarget);
+
+    formData.append("access_key", "73e22efd-65f6-4aa1-a1a4-6baa684c7c70");
+
+    fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          setFormStatus({
+            type: "success",
+            message: res.message,
+          });
+          setFormData({
+            name: "",
+            company: "",
+            email: "",
+            message: "",
+          });
+        } else {
+          setFormStatus({
+            type: "error",
+            message: res.message,
+          });
+        }
       });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setFormStatus({
-          type: "success",
-          message: data.message,
-        });
-        setFormData({
-          name: "",
-          company: "",
-          email: "",
-          message: "",
-        });
-      } else {
-        setFormStatus({
-          type: "error",
-          message: data.message,
-        });
-      }
-    } catch (error) {
-      setFormStatus({
-        type: "error",
-        message: "Something went wrong. Please try again later.",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  }
 
   return (
     <>
