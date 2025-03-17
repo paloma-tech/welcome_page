@@ -11,8 +11,8 @@ import { Metadata } from "next";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Paloma - Cloud-Based ERP & POS Solution",
-  description: "Empower your business with our comprehensive cloud-based ERP and POS solution",
+  title: "Paloma - Cloud-Optional ERP & POS Solution",
+  description: "Empower your business with our comprehensive cloud-optional ERP and POS solution",
   icons: {
     icon: "/logo/black icon.png",
   },
