@@ -7,7 +7,7 @@ import ScrollUp from "@/components/Common/ScrollUp";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Welcome to Paloma - Cloud-Based ERP & POS Solution",
+  title: "Welcome to Paloma - Cloud-Optional ERP & POS Solution",
   description: "Empower your business with our comprehensive cloud-optional ERP and POS solution",
 };
 
