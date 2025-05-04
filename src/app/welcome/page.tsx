@@ -3,6 +3,8 @@ import WelcomeFeatures from "@/components/Welcome/WelcomeFeatures";
 import WelcomeERPSolutions from "@/components/Welcome/WelcomeERPSolutions";
 import WhyChooseUs from "@/components/Welcome/WhyChooseUs";
 import AboutSection from "@/components/Welcome/AboutSection";
+import ScreenshotsSection from "@/components/Welcome/ScreenshotsSection";
+import CallToAction from "@/components/Welcome/CallToAction";
 import ScrollUp from "@/components/Common/ScrollUp";
 import { Metadata } from "next";
 
@@ -19,7 +21,9 @@ export default function WelcomePage() {
       <WelcomeFeatures />
       <AboutSection />
       <WelcomeERPSolutions />
+      <ScreenshotsSection />
       <WhyChooseUs />
+      <CallToAction />
     </>
   );
 }

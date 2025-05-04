@@ -111,12 +111,7 @@ const Header = () => {
                 </nav>
               </div>
               <div className="flex items-center justify-end pr-16 lg:pr-0">
-                <Link
-                  href="/signin"
-                  className="hidden rounded-sm bg-primary/10 px-8 py-3 text-base font-medium text-black dark:text-white duration-300 ease-in-out hover:bg-primary/20 md:block"
-                >
-                  Sign In
-                </Link>
+                {/* Sign In button hidden as requested */}
                 {/* <div className="ml-4">
                   <ThemeToggler />
                 </div> */}
