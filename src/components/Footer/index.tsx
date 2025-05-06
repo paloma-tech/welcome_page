@@ -1,8 +1,10 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Footer = () => {
+  const { t } = useLanguage();
   return (
     <footer className="relative z-10 bg-gray-dark pt-16 dark:bg-gray-dark md:pt-20 lg:pt-24">
       <div className="container">
@@ -74,11 +76,11 @@ const Footer = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* Copyright */}
             <div className="border-t border-body-color/10 py-8 dark:border-white/10">
               <p className="text-center text-base text-body-color dark:text-body-color-dark">
-                Copyright © {new Date().getFullYear()} Paloma, All rights reserved.
+                {t('footer.copyright').replace('{year}', new Date().getFullYear().toString())}
               </p>
             </div>
           </div>

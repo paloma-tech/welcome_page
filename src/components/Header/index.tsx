@@ -4,11 +4,14 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import menuData from "./menuData";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useLanguage } from "@/contexts/LanguageContext";
 // import ThemeToggler from "./ThemeToggler";
 
 const Header = () => {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [sticky, setSticky] = useState(false);
+  const { t } = useLanguage();
 
   const pathname = usePathname();
 
@@ -103,7 +106,7 @@ const Header = () => {
                               : "text-dark hover:text-primary dark:text-white/70 dark:hover:text-white"
                           }`}
                         >
-                          {menuItem.title}
+                          {t(`header.${menuItem.title.toLowerCase().replace(/\s+/g, '')}`)}
                         </Link>
                       </li>
                     ))}
@@ -111,6 +114,7 @@ const Header = () => {
                 </nav>
               </div>
               <div className="flex items-center justify-end pr-16 lg:pr-0">
+                <LanguageSwitcher />
                 {/* Sign In button hidden as requested */}
                 {/* <div className="ml-4">
                   <ThemeToggler />

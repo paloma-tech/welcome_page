@@ -1,7 +1,11 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const AboutSection = () => {
+  const { t } = useLanguage();
   return (
     <section className="bg-white py-16 dark:bg-gray-dark md:py-20 lg:py-28">
       <div className="container">
@@ -600,17 +604,14 @@ const AboutSection = () => {
             >
               <div className="mb-4">
                 <span className="mb-2 block text-lg font-semibold text-primary">
-                  Who we are
+                  {t('about.badge')}
                 </span>
                 <h2 className="mb-8 text-3xl font-bold text-black dark:text-white sm:text-4xl lg:text-3xl xl:text-4xl">
-                  Our POS simplifies sales, tracks inventory, and streamlines
-                  operations
+                  {t('about.title')}
                 </h2>
               </div>
               <p className="mb-10 text-base leading-relaxed text-body-color dark:text-body-color-dark">
-                {
-                  "With Paloma's integrated ERP solution, you can monitor your business operations from anywhere, streamline your processes, and make data-driven decisions that drive growth and efficiency."
-                }
+                {t('about.description')}
               </p>
             </div>
           </div>

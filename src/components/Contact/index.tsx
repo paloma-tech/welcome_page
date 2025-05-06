@@ -1,5 +1,6 @@
 "use client";
 import { FormEvent, useEffect, useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface FormData {
   name: string;
@@ -14,6 +15,8 @@ interface FormStatus {
 }
 
 const Contact = () => {
+  const { t } = useLanguage();
+
   const [formData, setFormData] = useState<FormData>({
     name: "",
     company: "",
@@ -69,6 +72,7 @@ const Contact = () => {
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    setIsSubmitting(true);
     const formData = new FormData(e.currentTarget);
 
     formData.append("access_key", "73e22efd-65f6-4aa1-a1a4-6baa684c7c70");
@@ -96,6 +100,10 @@ const Contact = () => {
             message: res.message,
           });
         }
+        setIsSubmitting(false);
+      })
+      .catch(() => {
+        setIsSubmitting(false);
       });
   }
 
@@ -108,7 +116,7 @@ const Contact = () => {
             <div className="w-full lg:w-1/2">
               <div data-animation="fadeInUp" className="elementor-invisible">
                 <h1 className="mb-5 text-3xl font-bold text-black dark:text-white sm:text-4xl lg:text-3xl xl:text-4xl">
-                  Contact us
+                  {t('contact.title')}
                 </h1>
               </div>
               <div
@@ -117,7 +125,7 @@ const Contact = () => {
                 style={{ animationDelay: "200ms" }}
               >
                 <h4 className="text-lg font-medium text-body-color dark:text-body-color-dark">
-                  Get in touch and let us know how we can help.
+                  {t('contact.subtitle')}
                 </h4>
               </div>
             </div>
@@ -136,11 +144,10 @@ const Contact = () => {
                 className="elementor-invisible mb-12 rounded-sm bg-white px-8 py-11 shadow-three dark:bg-gray-dark sm:p-[55px] lg:mb-5 lg:px-8 xl:p-[55px]"
               >
                 <h2 className="mb-3 text-2xl font-bold text-black dark:text-white sm:text-3xl lg:text-2xl xl:text-3xl">
-                  Send us a message
+                  {t('contact.form.title')}
                 </h2>
                 <p className="mb-12 text-base font-medium text-body-color">
-                  Our team is here to help you optimize your business operations
-                  and enhance your point of sale experience.
+                  {t('contact.form.description')}
                 </p>
 
                 {formStatus.type && (
@@ -163,7 +170,7 @@ const Contact = () => {
                           htmlFor="name"
                           className="mb-3 block text-sm font-medium text-dark dark:text-white"
                         >
-                          Your Name
+                          {t('contact.form.name')}
                         </label>
                         <input
                           type="text"
@@ -171,7 +178,7 @@ const Contact = () => {
                           value={formData.name}
                           onChange={handleChange}
                           required
-                          placeholder="Enter your name"
+                          placeholder={t('contact.form.name.placeholder')}
                           className="w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark"
                         />
                       </div>
@@ -182,14 +189,14 @@ const Contact = () => {
                           htmlFor="company"
                           className="mb-3 block text-sm font-medium text-dark dark:text-white"
                         >
-                          Company
+                          {t('contact.form.company')}
                         </label>
                         <input
                           type="text"
                           name="company"
                           value={formData.company}
                           onChange={handleChange}
-                          placeholder="Enter your company name"
+                          placeholder={t('contact.form.company.placeholder')}
                           className="w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark"
                         />
                       </div>
@@ -200,7 +207,7 @@ const Contact = () => {
                           htmlFor="email"
                           className="mb-3 block text-sm font-medium text-dark dark:text-white"
                         >
-                          Your Email
+                          {t('contact.form.email')}
                         </label>
                         <input
                           type="email"
@@ -208,7 +215,7 @@ const Contact = () => {
                           value={formData.email}
                           onChange={handleChange}
                           required
-                          placeholder="Enter your email"
+                          placeholder={t('contact.form.email.placeholder')}
                           className="w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark"
                         />
                       </div>
@@ -219,7 +226,7 @@ const Contact = () => {
                           htmlFor="message"
                           className="mb-3 block text-sm font-medium text-dark dark:text-white"
                         >
-                          Message
+                          {t('contact.form.message')}
                         </label>
                         <textarea
                           name="message"
@@ -227,7 +234,7 @@ const Contact = () => {
                           onChange={handleChange}
                           required
                           rows={5}
-                          placeholder="Enter your Message"
+                          placeholder={t('contact.form.message.placeholder')}
                           className="w-full resize-none rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark"
                         ></textarea>
                       </div>
@@ -240,7 +247,7 @@ const Contact = () => {
                           isSubmitting ? "cursor-not-allowed opacity-75" : ""
                         }`}
                       >
-                        {isSubmitting ? "Sending..." : "Send Message"}
+                        {isSubmitting ? t('contact.form.submitting') : t('contact.form.submit')}
                       </button>
                     </div>
                   </div>
@@ -255,12 +262,10 @@ const Contact = () => {
             >
               <div className="mb-12 rounded-sm bg-white px-8 py-11 shadow-three dark:bg-gray-dark sm:p-[55px] lg:mb-5 lg:px-8 xl:p-[55px]">
                 <h2 className="mb-3 text-2xl font-bold text-black dark:text-white">
-                  Get in touch
+                  {t('contact.info.title')}
                 </h2>
                 <p className="mb-12 text-base font-medium text-body-color">
-                  {
-                    "Have a question about our ERP Point of Sale system? We're here to provide you with the best support possible."
-                  }
+                  {t('contact.info.description')}
                 </p>
 
                 <div className="mb-8 flex w-full max-w-[370px] items-center">
@@ -269,7 +274,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="mb-1 text-xl font-bold text-black dark:text-white">
-                      Email Us
+                      {t('contact.info.email.title')}
                     </h4>
                     <a
                       href="mailto:contact@paloma.tn"
@@ -286,7 +291,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="mb-1 text-xl font-bold text-black dark:text-white">
-                      Call Us
+                      {t('contact.info.call.title')}
                     </h4>
                     <div className="text-base text-body-color dark:text-body-color-dark">
                       <a

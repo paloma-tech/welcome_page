@@ -11,10 +11,16 @@ import { Metadata } from "next";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Paloma - Cloud-Optional ERP & POS Solution",
-  description: "Empower your business with our comprehensive cloud-optional ERP and POS solution",
+  title: "Paloma - Solution ERP & PDV Cloud-Optionnelle",
+  description: "Optimisez votre entreprise avec notre solution ERP et PDV cloud-optionnelle complète",
   icons: {
     icon: "/logo/black icon.png",
+  },
+  alternates: {
+    languages: {
+      'en-US': '/en',
+      'fr-FR': '/',
+    },
   },
 };
 
@@ -24,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html suppressHydrationWarning lang="en">
+    <html suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

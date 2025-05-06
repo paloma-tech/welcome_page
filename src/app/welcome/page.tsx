@@ -9,8 +9,14 @@ import ScrollUp from "@/components/Common/ScrollUp";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Welcome to Paloma - Cloud-Optional ERP & POS Solution",
-  description: "Empower your business with our comprehensive cloud-optional ERP and POS solution",
+  title: "Bienvenue chez Paloma - Solution ERP & PDV Cloud-Optionnelle",
+  description: "Optimisez votre entreprise avec notre solution ERP et PDV cloud-optionnelle complète",
+  alternates: {
+    languages: {
+      'en-US': '/en/welcome',
+      'fr-FR': '/welcome',
+    },
+  },
 };
 
 export default function WelcomePage() {

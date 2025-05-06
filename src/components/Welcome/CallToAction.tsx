@@ -2,8 +2,10 @@
 
 import React from "react";
 import Link from "next/link";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const CallToAction = () => {
+  const { t } = useLanguage();
   return (
     <section className="relative z-10 overflow-hidden py-16 md:py-20 lg:py-28">
       {/* Background Pattern */}
@@ -65,11 +67,10 @@ const CallToAction = () => {
         <div className="wow fadeInUp relative mx-auto max-w-[850px] overflow-hidden rounded-lg bg-white px-8 py-12 text-center shadow-lg dark:bg-gray-dark sm:px-12 md:px-16 md:py-16 lg:px-20 lg:py-20" data-wow-delay=".1s">
           {/* Section Content */}
           <h2 className="mb-4 text-3xl font-bold text-black dark:text-white sm:text-4xl md:text-[45px] md:leading-tight">
-            Ready to Transform Your Business?
+            {t('cta.title')}
           </h2>
           <p className="mb-10 text-base font-medium text-body-color dark:text-body-color-dark">
-            Start your journey with our comprehensive ERP and POS solution today.
-            Sign up for a free trial or contact our sales team for a personalized demo.
+            {t('cta.description')}
           </p>
 
           {/* CTA Buttons */}
@@ -78,13 +79,13 @@ const CallToAction = () => {
               href="/contact"
               className="rounded-md bg-primary px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80 w-full sm:w-auto"
             >
-              Start Free Trial
+              {t('cta.trial')}
             </Link>
             <Link
               href="/contact"
               className="rounded-md bg-black/20 px-8 py-4 text-base font-semibold text-dark duration-300 ease-in-out hover:bg-black/30 dark:bg-white/10 dark:text-white dark:hover:bg-white/5 w-full sm:w-auto"
             >
-              Request Demo
+              {t('cta.demo')}
             </Link>
           </div>
 

@@ -1,26 +1,30 @@
+"use client";
+
 import React from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const WhyChooseUs = () => {
+  const { t } = useLanguage();
   const features = [
     {
       icon: "scale",
-      title: "Scalable cloud-based technology",
-      description: "Our ERP adapts to your business growth, ensuring smooth operations at any scale"
+      title: t('why.feature1.title'),
+      description: t('why.feature1.description')
     },
     {
       icon: "interface",
-      title: "User-Friendly and Intuitive Interface",
-      description: "Designed for ease of use, enabling quick adoption with minimal training"
+      title: t('why.feature2.title'),
+      description: t('why.feature2.description')
     },
     {
       icon: "security",
-      title: "Secure Data Storage and Backup",
-      description: "Your business data is encrypted and backed up regularly for maximum security"
+      title: t('why.feature3.title'),
+      description: t('why.feature3.description')
     },
     {
       icon: "support",
-      title: "24/7 Customer Support",
-      description: "Get assistance anytime with our dedicated support team, ready to help you solve issues quickly"
+      title: t('why.feature4.title'),
+      description: t('why.feature4.description')
     }
   ];
 
@@ -71,17 +75,17 @@ const WhyChooseUs = () => {
       <div className="container">
         <div className="mx-auto max-w-2xl text-center mb-12 lg:mb-20">
           <span className="mb-2 block text-lg font-semibold text-primary">
-            Why Choose us
+            {t('why.title')}
           </span>
           <h2 className="mb-4 text-3xl font-bold text-black dark:text-white sm:text-4xl md:text-[40px]">
-            We are the best in the business
+            {t('why.description')}
           </h2>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className="wow fadeInUp rounded-md bg-white p-8 shadow-md hover:shadow-lg dark:bg-dark-2"
               data-wow-delay={`.${index + 1}s`}
             >

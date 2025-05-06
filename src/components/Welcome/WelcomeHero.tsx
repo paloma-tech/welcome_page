@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const WelcomeHero = () => {
+  const { t } = useLanguage();
   return (
     <section className="relative z-10 overflow-hidden bg-gradient-to-b from-primary/5 to-white dark:from-gray-dark dark:to-gray-dark/80 pb-16 pt-[120px] dark:pb-[120px] md:pt-[150px] xl:pb-[160px] xl:pt-[180px]">
       {/* Shape SVG Top Right */}
@@ -21,13 +25,13 @@ const WelcomeHero = () => {
           <div className="w-full px-4 lg:w-1/2">
             <div className="mx-auto max-w-[600px] lg:mx-0">
               <span className="mb-5 inline-block rounded-md bg-primary/10 px-4 py-1 text-primary dark:bg-primary/20">
-                Cloud-Optional ERP & POS Solution
+                {t('hero.badge')}
               </span>
               <h1 className="mb-6 text-3xl font-bold leading-tight text-black dark:text-white sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight">
-                Empower Your Business Operations
+                {t('hero.title')}
               </h1>
               <p className="mb-8 text-base leading-relaxed text-body-color dark:text-body-color-dark sm:text-lg md:text-xl max-w-[500px]">
-                Effortlessly manage sales, inventory, and operations with our cutting-edge cloud-optional ERP system that works online and offline.
+                {t('hero.description')}
               </p>
 
               {/* Feature highlights */}
@@ -39,7 +43,7 @@ const WelcomeHero = () => {
                     </svg>
                   </div>
                   <p className="text-sm md:text-base font-medium text-body-color dark:text-body-color-dark">
-                    Inventory Management
+                    {t('hero.feature1')}
                   </p>
                 </div>
                 <div className="flex items-center">
@@ -49,7 +53,7 @@ const WelcomeHero = () => {
                     </svg>
                   </div>
                   <p className="text-sm md:text-base font-medium text-body-color dark:text-body-color-dark">
-                    Point of Sale
+                    {t('hero.feature2')}
                   </p>
                 </div>
                 <div className="flex items-center">
@@ -59,7 +63,7 @@ const WelcomeHero = () => {
                     </svg>
                   </div>
                   <p className="text-sm md:text-base font-medium text-body-color dark:text-body-color-dark">
-                    Financial Reports
+                    {t('hero.feature4')}
                   </p>
                 </div>
                 <div className="flex items-center">
@@ -69,7 +73,7 @@ const WelcomeHero = () => {
                     </svg>
                   </div>
                   <p className="text-sm md:text-base font-medium text-body-color dark:text-body-color-dark">
-                    Customer Management
+                    {t('hero.feature3')}
                   </p>
                 </div>
               </div>
@@ -80,13 +84,13 @@ const WelcomeHero = () => {
                   href="/contact"
                   className="rounded-md bg-primary px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/90 w-full sm:w-auto text-center"
                 >
-                  Start Free Trial
+                  {t('hero.cta.trial')}
                 </Link>
                 <Link
                   href="/contact"
                   className="rounded-md bg-black/10 px-8 py-4 text-base font-semibold text-black dark:text-white duration-300 ease-in-out hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20 w-full sm:w-auto text-center"
                 >
-                  Learn More
+                  {t('hero.cta.learn')}
                 </Link>
               </div>
             </div>
@@ -123,7 +127,7 @@ const WelcomeHero = () => {
               <div className="relative overflow-hidden rounded-xl bg-white p-6 shadow-[0_5px_30px_rgba(74,108,247,0.15)] dark:bg-dark-2 dark:shadow-[0_5px_30px_rgba(0,0,0,0.2)] border border-primary/10 dark:border-primary/5 transition-all duration-300 hover:shadow-[0_10px_40px_rgba(74,108,247,0.25)] dark:hover:shadow-[0_10px_40px_rgba(0,0,0,0.3)]">
                 {/* Image label */}
                 <div className="absolute top-4 left-4 z-20 bg-primary/90 text-white text-sm px-3 py-1 rounded-md font-medium">
-                  Dashboard View
+                  {t('hero.dashboard.label')}
                 </div>
 
                 {/* Image container with gradient overlay */}
@@ -141,7 +145,7 @@ const WelcomeHero = () => {
 
                 {/* Caption */}
                 <div className="mt-4 text-center text-base text-body-color dark:text-body-color-dark">
-                  Powerful and intuitive business management interface
+                  {t('hero.dashboard.caption')}
                 </div>
               </div>
 

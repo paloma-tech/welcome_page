@@ -1,36 +1,40 @@
+"use client";
+
 import React from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const WelcomeERPSolutions = () => {
+  const { t } = useLanguage();
   const solutions = [
     {
       icon: "store",
-      title: "Multi-Store Management",
-      description: "Monitor multiple store locations with a single dashboard"
+      title: t('erp.solution1.title'),
+      description: t('erp.solution1.description')
     },
     {
       icon: "inventory",
-      title: "Inventory Management",
-      description: "Track stock levels, automate restocking, and reduce wastage with our smart inventory tools"
+      title: t('erp.solution2.title'),
+      description: t('erp.solution2.description')
     },
     {
       icon: "employee",
-      title: "Employee Management",
-      description: "Effectively manage employee roles, shifts, payroll, and performance tracking within a single platform"
+      title: t('erp.solution3.title'),
+      description: t('erp.solution3.description')
     },
     {
       icon: "ai",
-      title: "AI-Powered Process Automation",
-      description: "Simplify operations with AI-driven document scanning and automated form filling"
+      title: t('erp.solution4.title'),
+      description: t('erp.solution4.description')
     },
     {
       icon: "mobile",
-      title: "Mobile Accessibility",
-      description: "Manage your business on-the-go with our mobile-friendly platform"
+      title: t('erp.solution5.title'),
+      description: t('erp.solution5.description')
     },
     {
       icon: "offline",
-      title: "Offline Mode for POS",
-      description: "Continue processing transactions even without an internet connection, syncing automatically when reconnected"
+      title: t('erp.solution6.title'),
+      description: t('erp.solution6.description')
     }
   ];
 
@@ -103,17 +107,17 @@ const WelcomeERPSolutions = () => {
       <div className="container">
         <div className="text-center mb-12 lg:mb-20">
           <span className="mb-2 block text-lg font-semibold text-primary">
-            What we offer
+            {t('erp.badge')}
           </span>
           <h2 className="mb-4 text-3xl font-bold text-black dark:text-white sm:text-4xl md:text-[40px]">
-            Our complete ERP solutions
+            {t('erp.title')}
           </h2>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {solutions.map((solution, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className="wow fadeInUp rounded-lg bg-white p-8 shadow-md hover:shadow-lg dark:bg-dark-2 flex flex-col items-center text-center"
               data-wow-delay={`.${index + 1}s`}
             >

@@ -1,52 +1,68 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const ScreenshotsSection = () => {
-  // Sample screenshots data - replace with actual screenshots later
-  const screenshots = [
-    
+  const { t, language } = useLanguage();
+
+  // Function to get screenshots with translated content
+  const getScreenshots = () => [
     {
       id: 1,
-      title: "POS Interface",
-      description: "Intuitive point-of-sale system for quick transactions",
+      title: t('screenshots.pos.title'),
+      description: t('screenshots.pos.description'),
       image: "/images/screenshots/pos.png", // Replace with actual screenshot path
     },
     {
       id: 2,
-      title: "Dashboard Overview",
-      description: "Complete business overview with key metrics and analytics",
+      title: t('screenshots.dashboard.title'),
+      description: t('screenshots.dashboard.description'),
       image: "/images/screenshots/dashboard.png", // Replace with actual screenshot path
     },
     {
       id: 3,
-      title: "Invoice Management",
-      description: "Create, customize and manage professional invoices with automatic calculations and tax handling",
+      title: t('screenshots.invoice.title'),
+      description: t('screenshots.invoice.description'),
       image: "/images/screenshots/invoice.png", // Screenshot showing invoice interface
     },
     {
       id: 4,
-      title: "Employee Management",
-      description: "Customize user permissions with role-based access control for secure system management",
+      title: t('screenshots.employee.title'),
+      description: t('screenshots.employee.description'),
       image: "/images/screenshots/role.png", // Screenshot showing role permissions
     },
     {
       id: 5,
-      title: "Printer Configuration",
-      description: "Configure receipt printers with customizable templates and settings for different business needs",
+      title: t('screenshots.printer.title'),
+      description: t('screenshots.printer.description'),
       image: "/images/screenshots/printer-settings.png", // Screenshot showing printer configuration
     },
     {
       id: 6,
-      title: "Kitchen Display System",
-      description: "Real-time kitchen screen with order management and integrated printer settings for efficient food preparation",
+      title: t('screenshots.kitchen.title'),
+      description: t('screenshots.kitchen.description'),
       image: "/images/screenshots/kitchen-printer-settings.png", // Screenshot showing kitchen display system
     },
   ];
 
+  // Get screenshots with current language translations
+  const screenshots = getScreenshots();
+
   // State to track the currently selected screenshot
   const [selectedScreenshot, setSelectedScreenshot] = useState(screenshots[0]);
+
+  // Update selected screenshot when language changes
+  useEffect(() => {
+    const updatedScreenshots = getScreenshots();
+    // Find the screenshot with the same ID as the currently selected one
+    const updatedSelectedScreenshot = updatedScreenshots.find(
+      (screenshot) => screenshot.id === selectedScreenshot.id
+    ) || updatedScreenshots[0];
+
+    setSelectedScreenshot(updatedSelectedScreenshot);
+  }, [language]);
 
   return (
     <section className="py-12 md:py-16 lg:py-20 bg-primary/5 dark:bg-gray-dark">
@@ -54,13 +70,13 @@ const ScreenshotsSection = () => {
         {/* Section Header */}
         <div className="mx-auto mb-8 max-w-[620px] text-center lg:mb-12">
           <span className="mb-2 block text-lg font-semibold text-primary">
-            Product Screenshots
+            {t('screenshots.badge')}
           </span>
           <h2 className="mb-3 text-2xl font-bold text-black dark:text-white sm:text-3xl md:text-4xl">
-            See Our Solution in Action
+            {t('screenshots.title')}
           </h2>
           <p className="text-base leading-relaxed text-body-color dark:text-body-color-dark">
-            Explore the intuitive interfaces and powerful features that make our ERP and POS solution stand out
+            {t('screenshots.description')}
           </p>
         </div>
 
