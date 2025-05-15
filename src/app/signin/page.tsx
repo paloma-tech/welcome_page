@@ -1,12 +1,67 @@
-import Link from "next/link";
-import { Metadata } from "next";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Sign In - Paloma ERP",
-  description: "Sign in to your Paloma ERP account",
-};
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const SignIn = () => {
+  const router = useRouter();
+  const { t } = useLanguage();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      setIsSubmitting(true);
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Save the token to localStorage
+        if (data.token) {
+          // Import dynamically to avoid SSR issues
+          const { saveToken } = await import('@/lib/auth');
+          saveToken(data.token);
+
+          // Redirect to dashboard
+          router.push("/dashboard");
+        } else {
+          setError(t('signin.error.auth'));
+        }
+      } else {
+        setError(data.message || t('signin.error.login'));
+      }
+    } catch (err) {
+      setError(t('signin.error.general'));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       <section className="relative z-10 overflow-hidden pb-16 pt-36 md:pb-20 lg:pb-28 lg:pt-[180px]">
@@ -15,23 +70,31 @@ const SignIn = () => {
             <div className="w-full px-4">
               <div className="mx-auto max-w-[500px] rounded-md bg-primary/[.03] px-6 py-10 shadow-md dark:bg-dark sm:p-[60px]">
                 <h3 className="mb-3 text-center text-2xl font-bold text-black dark:text-white sm:text-3xl">
-                  Sign in to your account
+                  {t('signin.title')}
                 </h3>
                 <p className="mb-11 text-center text-base font-medium text-body-color">
-                  Login to your account for a faster checkout.
+                  {t('signin.subtitle')}
                 </p>
-                <form>
+                {error && (
+                  <div className="mb-8 rounded-sm bg-red-50 p-4 text-center text-red-500 dark:bg-red-900/30">
+                    {error}
+                  </div>
+                )}
+                <form onSubmit={handleSubmit}>
                   <div className="mb-8">
                     <label
                       htmlFor="email"
                       className="mb-3 block text-sm font-medium text-dark dark:text-white"
                     >
-                      Your Email
+                      {t('signin.email.label')}
                     </label>
                     <input
                       type="email"
                       name="email"
-                      placeholder="Enter your email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder={t('signin.email.placeholder')}
                       className="w-full rounded-md border border-transparent px-6 py-3 text-base text-body-color placeholder-body-color shadow-one outline-none focus:border-primary focus-visible:shadow-none dark:bg-[#242B51] dark:shadow-signUp"
                     />
                   </div>
@@ -40,29 +103,36 @@ const SignIn = () => {
                       htmlFor="password"
                       className="mb-3 block text-sm font-medium text-dark dark:text-white"
                     >
-                      Your Password
+                      {t('signin.password.label')}
                     </label>
                     <input
                       type="password"
                       name="password"
-                      placeholder="Enter your password"
+                      required
+                      value={formData.password}
+                      onChange={handleChange}
+                      placeholder={t('signin.password.placeholder')}
                       className="w-full rounded-md border border-transparent px-6 py-3 text-base text-body-color placeholder-body-color shadow-one outline-none focus:border-primary focus-visible:shadow-none dark:bg-[#242B51] dark:shadow-signUp"
                     />
                   </div>
                   <div className="mb-8 flex flex-col justify-between sm:flex-row sm:items-center">
                     <div className="mb-4 sm:mb-0">
                       <label
-                        htmlFor="checkboxLabel"
+                        htmlFor="rememberMe"
                         className="flex cursor-pointer select-none items-center text-sm font-medium text-body-color"
                       >
                         <div className="relative">
                           <input
                             type="checkbox"
-                            id="checkboxLabel"
+                            id="rememberMe"
+                            checked={rememberMe}
+                            onChange={(e) => setRememberMe(e.target.checked)}
                             className="sr-only"
                           />
-                          <div className="box mr-4 flex h-5 w-5 items-center justify-center rounded border border-body-color border-opacity-20 dark:border-white dark:border-opacity-10">
-                            <span className="opacity-0">
+                          <div className={`box mr-4 flex h-5 w-5 items-center justify-center rounded border ${
+                            rememberMe ? 'border-primary bg-primary' : 'border-body-color border-opacity-20 dark:border-white dark:border-opacity-10'
+                          }`}>
+                            <span className={`opacity-${rememberMe ? '100' : '0'}`}>
                               <svg
                                 width="11"
                                 height="8"
@@ -71,39 +141,41 @@ const SignIn = () => {
                                 xmlns="http://www.w3.org/2000/svg"
                               >
                                 <path
-                                  d="M10.0915 0.951972L10.0867 0.946075L10.0813 0.940568C9.90076 0.753564 9.61034 0.753146 9.42927 0.939309L4.16201 6.22962L1.58507 3.63469C1.40401 3.44841 1.11351 3.44879 0.932892 3.63584C0.755703 3.81933 0.755703 4.10875 0.932892 4.29224L0.932878 4.29225L0.934851 4.29424L3.58046 6.95832C3.73676 7.11955 3.94983 7.2 4.1473 7.2C4.36196 7.2 4.55963 7.11773 4.71406 6.9584L10.0468 1.60234C10.2436 1.4199 10.2421 1.1339 10.0915 0.951972ZM4.2327 6.30081L4.2317 6.2998C4.23206 6.30015 4.23237 6.30049 4.23269 6.30082L4.2327 6.30081Z"
-                                  fill="#3056D3"
-                                  stroke="#3056D3"
-                                  strokeWidth="0.4"
+                                  d="M10.0915 0.951972L10.0867 0.946075L10.0813 0.940568C9.90076 0.753564 9.61034 0.753146 9.42927 0.939309L4.16201 6.22962L1.58507 3.63469C1.40401 3.44841 1.11351 3.44879 0.932892 3.63584C0.755703 3.81933 0.755703 4.10875 0.932892 4.29224L0.932878 4.29225L0.934851 4.29424L3.58046 6.95832C3.73676 7.11955 3.94983 7.2 4.1473 7.2C4.36196 7.2 4.55963 7.11773 4.71406 6.9584L10.0468 1.60234C10.2436 1.4199 10.2421 1.1339 10.0915 0.951972Z"
+                                  fill="#ffffff"
                                 />
                               </svg>
                             </span>
                           </div>
                         </div>
-                        Remember me
+                        {t('signin.rememberMe')}
                       </label>
                     </div>
                     <div>
-                      <a
-                        href="#0"
+                      <Link
+                        href="/forgot-password"
                         className="text-sm font-medium text-primary hover:underline"
                       >
-                        Forgot Password?
-                      </a>
+                        {t('signin.forgotPassword')}
+                      </Link>
                     </div>
                   </div>
                   <div className="mb-6">
-                    <button className="flex w-full items-center justify-center rounded-md bg-primary px-10 py-4 text-base font-medium text-white transition duration-300 hover:bg-primary/90">
-                      Sign in
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="flex w-full items-center justify-center rounded-md bg-primary px-10 py-4 text-base font-medium text-white transition duration-300 hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {isSubmitting ? t('signin.button.signingin') : t('signin.button.signin')}
                     </button>
                   </div>
                   <p className="text-center text-base font-medium text-body-color">
-                    {"Don't have an account?"}
+                    {t('signin.noAccount')}{" "}
                     <Link
                       href="/signup"
                       className="text-primary hover:underline"
                     >
-                      Sign up
+                      {t('signin.signup')}
                     </Link>
                   </p>
                 </form>

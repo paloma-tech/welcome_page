@@ -3,18 +3,76 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { PhoneInput } from "@/components/ui/phone-input";
+import { validatePhoneNumber } from "@/lib/utils";
 
 const SignUp = () => {
   const router = useRouter();
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
     company: "",
+    adresse: "",
+    phone: "",
+  });
+  const [errors, setErrors] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    adresse: "",
+    phone: "",
+    terms: "",
   });
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
+
+  const validateField = (name: string, value: string) => {
+    let errorMessage = "";
+
+    switch (name) {
+      case "fullName":
+        if (!value.trim()) {
+          errorMessage = t('signup.fullName.error.required');
+        } else if (value.trim().length < 2) {
+          errorMessage = t('signup.fullName.error.length');
+        }
+        break;
+
+      case "email":
+        if (!value.trim()) {
+          errorMessage = t('signup.email.error.required');
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          errorMessage = t('signup.email.error.invalid');
+        }
+        break;
+
+      case "password":
+        if (!value) {
+          errorMessage = t('signup.password.error.required');
+        } else if (value.length < 8) {
+          errorMessage = t('signup.password.error.length');
+        }
+        break;
+
+      case "adresse":
+        if (value && value.trim().length < 5) {
+          errorMessage = t('signup.address.error.length');
+        }
+        break;
+
+      case "phone":
+        if (value && !validatePhoneNumber(value)) {
+          errorMessage = t('signup.phone.error.invalid');
+        }
+        break;
+    }
+
+    return errorMessage;
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -22,14 +80,49 @@ const SignUp = () => {
       ...prev,
       [name]: value,
     }));
+
+    // Validate the field
+    const errorMessage = validateField(name, value);
+    setErrors((prev) => ({
+      ...prev,
+      [name]: errorMessage,
+    }));
+  };
+
+  // Handle phone input change separately since it's not a standard input
+  const handlePhoneChange = (value: string | undefined) => {
+    const phoneValue = value || "";
+    setFormData((prev) => ({
+      ...prev,
+      phone: phoneValue,
+    }));
+
+    // Validate the phone field
+    const errorMessage = validateField("phone", phoneValue);
+    setErrors((prev) => ({
+      ...prev,
+      phone: errorMessage,
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
 
-    if (!agreeToTerms) {
-      setError("Please agree to the Terms & Conditions");
+    // Validate all fields
+    const newErrors = {
+      fullName: validateField("fullName", formData.fullName),
+      email: validateField("email", formData.email),
+      password: validateField("password", formData.password),
+      adresse: validateField("adresse", formData.adresse),
+      phone: validateField("phone", formData.phone),
+      terms: !agreeToTerms ? t('signup.terms.error') : "",
+    };
+
+    setErrors(newErrors);
+
+    // Check if there are any errors
+    if (Object.values(newErrors).some(error => error)) {
       return;
     }
 
@@ -48,10 +141,10 @@ const SignUp = () => {
       if (data.success) {
         router.push("/registration-success");
       } else {
-        setError(data.message || "Registration failed");
+        setError(data.message || t('signup.error.registration'));
       }
     } catch (err) {
-      setError("An error occurred. Please try again.");
+      setError(t('signup.error.general'));
     } finally {
       setIsSubmitting(false);
     }
@@ -65,10 +158,10 @@ const SignUp = () => {
             <div className="w-full px-4">
               <div className="mx-auto max-w-[500px] rounded-md bg-primary/[.03] px-6 py-10 shadow-md dark:bg-dark sm:p-[60px]">
                 <h3 className="mb-3 text-center text-2xl font-bold text-black dark:text-white sm:text-3xl">
-                  Create your account
+                  {t('signup.title')}
                 </h3>
                 <p className="mb-11 text-center text-base font-medium text-body-color">
-                  Start your ERP journey with a free trial
+                  {t('signup.subtitle')}
                 </p>
                 {error && (
                   <div className="mb-8 rounded-sm bg-red-50 p-4 text-center text-red-500 dark:bg-red-900/30">
@@ -81,7 +174,7 @@ const SignUp = () => {
                       htmlFor="fullName"
                       className="mb-3 block text-sm font-medium text-dark dark:text-white"
                     >
-                      Full Name
+                      {t('signup.fullName.label')}
                     </label>
                     <input
                       type="text"
@@ -89,16 +182,21 @@ const SignUp = () => {
                       required
                       value={formData.fullName}
                       onChange={handleChange}
-                      placeholder="Enter your full name"
-                      className="w-full rounded-md border border-transparent px-6 py-3 text-base text-body-color placeholder-body-color shadow-one outline-none focus:border-primary focus-visible:shadow-none dark:bg-[#242B51] dark:shadow-signUp"
+                      placeholder={t('signup.fullName.placeholder')}
+                      className={`w-full rounded-md border ${
+                        errors.fullName ? 'border-red-500' : 'border-transparent'
+                      } px-6 py-3 text-base text-body-color placeholder-body-color shadow-one outline-none focus:border-primary focus-visible:shadow-none dark:bg-[#242B51] dark:shadow-signUp`}
                     />
+                    {errors.fullName && (
+                      <p className="mt-1 text-sm text-red-500">{errors.fullName}</p>
+                    )}
                   </div>
                   <div className="mb-8">
                     <label
                       htmlFor="email"
                       className="mb-3 block text-sm font-medium text-dark dark:text-white"
                     >
-                      Work Email
+                      {t('signup.email.label')}
                     </label>
                     <input
                       type="email"
@@ -106,16 +204,21 @@ const SignUp = () => {
                       required
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="Enter your email"
-                      className="w-full rounded-md border border-transparent px-6 py-3 text-base text-body-color placeholder-body-color shadow-one outline-none focus:border-primary focus-visible:shadow-none dark:bg-[#242B51] dark:shadow-signUp"
+                      placeholder={t('signup.email.placeholder')}
+                      className={`w-full rounded-md border ${
+                        errors.email ? 'border-red-500' : 'border-transparent'
+                      } px-6 py-3 text-base text-body-color placeholder-body-color shadow-one outline-none focus:border-primary focus-visible:shadow-none dark:bg-[#242B51] dark:shadow-signUp`}
                     />
+                    {errors.email && (
+                      <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                    )}
                   </div>
                   <div className="mb-8">
                     <label
                       htmlFor="password"
                       className="mb-3 block text-sm font-medium text-dark dark:text-white"
                     >
-                      Password
+                      {t('signup.password.label')}
                     </label>
                     <input
                       type="password"
@@ -123,25 +226,71 @@ const SignUp = () => {
                       required
                       value={formData.password}
                       onChange={handleChange}
-                      placeholder="Choose a strong password"
-                      className="w-full rounded-md border border-transparent px-6 py-3 text-base text-body-color placeholder-body-color shadow-one outline-none focus:border-primary focus-visible:shadow-none dark:bg-[#242B51] dark:shadow-signUp"
+                      placeholder={t('signup.password.placeholder')}
+                      className={`w-full rounded-md border ${
+                        errors.password ? 'border-red-500' : 'border-transparent'
+                      } px-6 py-3 text-base text-body-color placeholder-body-color shadow-one outline-none focus:border-primary focus-visible:shadow-none dark:bg-[#242B51] dark:shadow-signUp`}
                     />
+                    {errors.password && (
+                      <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+                    )}
                   </div>
                   <div className="mb-8">
                     <label
                       htmlFor="company"
                       className="mb-3 block text-sm font-medium text-dark dark:text-white"
                     >
-                      Company Name
+                      {t('signup.company.label')}
                     </label>
                     <input
                       type="text"
                       name="company"
                       value={formData.company}
                       onChange={handleChange}
-                      placeholder="Enter your company name"
+                      placeholder={t('signup.company.placeholder')}
                       className="w-full rounded-md border border-transparent px-6 py-3 text-base text-body-color placeholder-body-color shadow-one outline-none focus:border-primary focus-visible:shadow-none dark:bg-[#242B51] dark:shadow-signUp"
                     />
+                  </div>
+                  <div className="mb-8">
+                    <label
+                      htmlFor="adresse"
+                      className="mb-3 block text-sm font-medium text-dark dark:text-white"
+                    >
+                      {t('signup.address.label')}
+                    </label>
+                    <input
+                      type="text"
+                      name="adresse"
+                      value={formData.adresse}
+                      onChange={handleChange}
+                      placeholder={t('signup.address.placeholder')}
+                      className={`w-full rounded-md border ${
+                        errors.adresse ? 'border-red-500' : 'border-transparent'
+                      } px-6 py-3 text-base text-body-color placeholder-body-color shadow-one outline-none focus:border-primary focus-visible:shadow-none dark:bg-[#242B51] dark:shadow-signUp`}
+                    />
+                    {errors.adresse && (
+                      <p className="mt-1 text-sm text-red-500">{errors.adresse}</p>
+                    )}
+                  </div>
+                  <div className="mb-8">
+                    <label
+                      htmlFor="phone"
+                      className="mb-3 block text-sm font-medium text-dark dark:text-white"
+                    >
+                      {t('signup.phone.label')}
+                    </label>
+                    <div className={`${errors.phone ? 'border-red-500 rounded-md border' : ''}`}>
+                      <PhoneInput
+                        value={formData.phone}
+                        onChange={handlePhoneChange}
+                        placeholder={t('signup.phone.placeholder')}
+                        defaultCountry="TN"
+                        className="shadow-one dark:shadow-signUp"
+                      />
+                    </div>
+                    {errors.phone && (
+                      <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
+                    )}
                   </div>
                   <div className="mb-8 flex">
                     <label className="flex cursor-pointer select-none text-sm font-medium text-body-color">
@@ -149,11 +298,21 @@ const SignUp = () => {
                         <input
                           type="checkbox"
                           checked={agreeToTerms}
-                          onChange={(e) => setAgreeToTerms(e.target.checked)}
+                          onChange={(e) => {
+                            setAgreeToTerms(e.target.checked);
+                            setErrors((prev) => ({
+                              ...prev,
+                              terms: e.target.checked ? "" : t('signup.terms.error'),
+                            }));
+                          }}
                           className="sr-only"
                         />
                         <div className={`box mr-4 mt-1 flex h-5 w-5 items-center justify-center rounded border ${
-                          agreeToTerms ? 'border-primary bg-primary' : 'border-body-color border-opacity-20 dark:border-white dark:border-opacity-10'
+                          errors.terms
+                            ? 'border-red-500'
+                            : agreeToTerms
+                              ? 'border-primary bg-primary'
+                              : 'border-body-color border-opacity-20 dark:border-white dark:border-opacity-10'
                         }`}>
                           <span className={`opacity-${agreeToTerms ? '100' : '0'}`}>
                             <svg
@@ -172,30 +331,35 @@ const SignUp = () => {
                         </div>
                       </div>
                       <div>
-                        By creating account, you agree to our{" "}
+                        {t('signup.terms.agree')}{" "}
                         <a href="#0" className="text-primary hover:underline">
-                          Terms & Conditions
+                          {t('signup.terms.termsConditions')}
                         </a>{" "}
-                        and{" "}
+                        {t('signup.terms.and')}{" "}
                         <a href="#0" className="text-primary hover:underline">
-                          Privacy Policy
+                          {t('signup.terms.privacyPolicy')}
                         </a>
                       </div>
                     </label>
                   </div>
+                  {errors.terms && (
+                    <div className="mb-6 -mt-6">
+                      <p className="text-sm text-red-500">{errors.terms}</p>
+                    </div>
+                  )}
                   <div className="mb-6">
                     <button
                       type="submit"
                       disabled={isSubmitting}
                       className="flex w-full items-center justify-center rounded-md bg-primary px-10 py-4 text-base font-medium text-white transition duration-300 hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                      {isSubmitting ? "Creating Account..." : "Create Account"}
+                      {isSubmitting ? t('signup.button.creating') : t('signup.button.create')}
                     </button>
                   </div>
                   <p className="text-center text-base font-medium text-body-color">
-                    Already have an account?{" "}
+                    {t('signup.haveAccount')}{" "}
                     <Link href="/signin" className="text-primary hover:underline">
-                      Sign in
+                      {t('signup.signin')}
                     </Link>
                   </p>
                 </form>

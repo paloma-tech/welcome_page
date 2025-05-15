@@ -79,12 +79,12 @@ const WelcomeHero = () => {
               </div>
 
               {/* Mobile-responsive button container */}
-              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-6">
                 <Link
-                  href="/contact"
+                  href="/signup"
                   className="rounded-md bg-primary px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/90 w-full sm:w-auto text-center"
                 >
-                  {t('hero.cta.trial')}
+                  {t('hero.cta.startnow')}
                 </Link>
                 <Link
                   href="/contact"
@@ -93,6 +93,8 @@ const WelcomeHero = () => {
                   {t('hero.cta.learn')}
                 </Link>
               </div>
+
+
             </div>
           </div>
 

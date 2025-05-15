@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
-import { insertUser } from '@/lib/db';
+import { insertUser, createVerificationToken } from '@/lib/db';
+import { sendVerificationEmail } from '@/lib/email';
 import bcrypt from 'bcryptjs';
+import { formatPhone } from '@/lib/utils';
 
 export async function POST(request: Request) {
   try {
-    const { fullName, email, password, company } = await request.json();
+    const { fullName, email, password, company, adresse, phone } = await request.json();
 
     // Basic validation
     if (!fullName || !email || !password) {
@@ -17,13 +19,36 @@ export async function POST(request: Request) {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Format phone number if present
+    const formattedPhone = phone ? phone : null;
+
+    // Log the phone number for debugging
+    console.log('Phone number received:', phone);
+    console.log('Formatted phone number:', formattedPhone);
+
     // Insert user into database
-    await insertUser({
+    const result: any = await insertUser({
       fullName,
       email,
       password: hashedPassword,
       company,
+      adresse,
+      phone: formattedPhone,
+      email_verified_at: null, // This will be set when the user verifies their email
     });
+
+    // Create a verification token
+    const userId = result.insertId;
+    const verificationToken = await createVerificationToken(userId);
+
+    try {
+      // Send verification email
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `${request.headers.get('x-forwarded-proto') || 'http'}://${request.headers.get('host')}`;
+      await sendVerificationEmail(email, verificationToken, baseUrl);
+    } catch (emailError) {
+      console.error('Error sending verification email:', emailError);
+      // Continue with registration even if email fails
+    }
 
     return NextResponse.json(
       { success: true, message: 'User registered successfully' },

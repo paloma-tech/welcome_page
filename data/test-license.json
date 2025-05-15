@@ -1,0 +1,225 @@
+{
+    "dashboard_data": {
+        "summary": {
+            "sales": {
+                "total": 987654.32,
+                "today": 23456.78,
+                "weekly": 123456.78,
+                "monthly": 567890.12,
+                "growth": 25.7
+            },
+            "orders": {
+                "total": 14,
+                "pending": 0,
+                "completed": 12,
+                "cancelled": 2
+            },
+            "inventory": {
+                "totalProducts": 250,
+                "totalValue": 789012.34,
+                "lowStock": 15,
+                "outOfStock": 5
+            },
+            "employees": {
+                "total": 3,
+                "active": 3,
+                "inactive": 0,
+                "roles": 3
+            }
+        },
+        "salesChart": {
+            "daily": [
+                {
+                    "name": "Wed",
+                    "value": 0
+                },
+                {
+                    "name": "Thu",
+                    "value": 0
+                },
+                {
+                    "name": "Fri",
+                    "value": 88.655
+                },
+                {
+                    "name": "Sat",
+                    "value": 0
+                },
+                {
+                    "name": "Sun",
+                    "value": 43.96
+                },
+                {
+                    "name": "Mon",
+                    "value": 72.93
+                },
+                {
+                    "name": "Tue",
+                    "value": 10.99
+                }
+            ],
+            "weekly": [
+                {
+                    "name": "Week 1",
+                    "value": 0
+                },
+                {
+                    "name": "Week 2",
+                    "value": 25.96
+                },
+                {
+                    "name": "Week 3",
+                    "value": 297.56
+                },
+                {
+                    "name": "Week 4",
+                    "value": 83.92
+                }
+            ],
+            "monthly": [
+                {
+                    "name": "Dec",
+                    "value": 0
+                },
+                {
+                    "name": "Jan",
+                    "value": 0
+                },
+                {
+                    "name": "Feb",
+                    "value": 0
+                },
+                {
+                    "name": "Mar",
+                    "value": 0
+                },
+                {
+                    "name": "Apr",
+                    "value": 0
+                },
+                {
+                    "name": "May",
+                    "value": 407.44000000000005
+                }
+            ]
+        },
+        "inventoryChart": {
+            "byCategory": [
+                {
+                    "name": "Raw Materials",
+                    "value": 750
+                },
+                {
+                    "name": "Spare Parts",
+                    "value": 150
+                },
+                {
+                    "name": "Electronics",
+                    "value": 100
+                }
+            ],
+            "topProducts": [
+                {
+                    "name": "Premium Restaurant POS",
+                    "value": 850
+                },
+                {
+                    "name": "Cloud Inventory System",
+                    "value": 720
+                },
+                {
+                    "name": "Enterprise ERP Solution",
+                    "value": 650
+                },
+                {
+                    "name": "Mobile Order Management",
+                    "value": 580
+                },
+                {
+                    "name": "Kitchen Display System",
+                    "value": 450
+                }
+            ],
+            "stockStatus": {
+                "inStock": 3,
+                "lowStock": 1,
+                "outOfStock": 0
+            }
+        },
+        "recentActivities": [
+            {
+                "id": 14,
+                "type": "sale",
+                "description": "New sale #14 for $10.99",
+                "time": "-41549.357734 seconds ago",
+                "timestamp": "2025-05-13T02:46:32.000000Z"
+            },
+            {
+                "id": 13,
+                "type": "sale",
+                "description": "New sale #13 for $32.97",
+                "time": "-64263.357808 seconds ago",
+                "timestamp": "2025-05-12T20:27:58.000000Z"
+            },
+            {
+                "id": 12,
+                "type": "sale",
+                "description": "New sale #12 for $6.99",
+                "time": "-66067.35786 seconds ago",
+                "timestamp": "2025-05-12T19:57:54.000000Z"
+            },
+            {
+                "id": 11,
+                "type": "sale",
+                "description": "New sale #11 for $10.99",
+                "time": "-66220.357907 seconds ago",
+                "timestamp": "2025-05-12T19:55:21.000000Z"
+            },
+            {
+                "id": 10,
+                "type": "sale",
+                "description": "New sale #10 for $10.99",
+                "time": "-67671.357952 seconds ago",
+                "timestamp": "2025-05-12T19:31:10.000000Z"
+            },
+            {
+                "id": 1,
+                "type": "employee",
+                "description": "Admin logged in",
+                "time": "-70324.358565 seconds ago",
+                "timestamp": "2025-05-12 19:46:57"
+            },
+            {
+                "id": 3,
+                "type": "employee",
+                "description": "amen bj logged in",
+                "time": "-595929.358587 seconds ago",
+                "timestamp": "2025-05-06 17:46:52"
+            },
+            {
+                "id": 4,
+                "type": "inventory",
+                "description": "Stock updated for eau",
+                "time": "-675092.358249 seconds ago",
+                "timestamp": "2025-05-05T18:47:29.000000Z"
+            },
+            {
+                "id": 1,
+                "type": "inventory",
+                "description": "Stock updated for Business Laptop Pro",
+                "time": "-755829.358284 seconds ago",
+                "timestamp": "2025-05-04T20:21:52.000000Z"
+            },
+            {
+                "id": 2,
+                "type": "inventory",
+                "description": "Stock updated for Steel Raw Material",
+                "time": "-755829.35831 seconds ago",
+                "timestamp": "2025-05-04T20:21:52.000000Z"
+            }
+        ]
+    },
+    "internet_connected": true,
+    "sync_mode": "automatic",
+    "last_updated": "2025-05-13T15:19:01+01:00"
+}
