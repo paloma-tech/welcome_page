@@ -1,13 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Metadata } from "next";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-export const metadata: Metadata = {
-  title: "Verification Failed - Paloma ERP",
-  description: "Email verification failed",
-};
 
 const VerificationFailed = () => {
   const { t } = useLanguage();
