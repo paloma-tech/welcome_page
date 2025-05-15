@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-const ResetPassword = () => {
+// Component that uses searchParams
+function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
 
+  // Rest of the component logic
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -294,6 +296,37 @@ const ResetPassword = () => {
         </div>
       </section>
     </>
+  );
+}
+
+// Loading fallback
+function ResetPasswordLoading() {
+  return (
+    <section className="relative z-10 overflow-hidden pb-16 pt-36 md:pb-20 lg:pb-28 lg:pt-[180px]">
+      <div className="container">
+        <div className="-mx-4 flex flex-wrap">
+          <div className="w-full px-4">
+            <div className="mx-auto max-w-[500px] rounded-md bg-primary/[.03] px-6 py-10 shadow-md dark:bg-dark sm:p-[60px]">
+              <h3 className="mb-3 text-center text-2xl font-bold text-black dark:text-white sm:text-3xl">
+                Reset Your Password
+              </h3>
+              <p className="mb-11 text-center text-base font-medium text-body-color">
+                Loading...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Main component with Suspense boundary
+const ResetPassword = () => {
+  return (
+    <Suspense fallback={<ResetPasswordLoading />}>
+      <ResetPasswordForm />
+    </Suspense>
   );
 };
 

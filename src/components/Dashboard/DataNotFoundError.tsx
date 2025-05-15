@@ -30,14 +30,14 @@ export function DataNotFoundError({ licenseKey, onRetry, isRetrying = false }: D
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name || !formData.email) {
       toast.error('Please fill in all required fields');
       return;
     }
-    
+
     setIsSubmitting(true);
-    
+
     try {
       // Send email to support
       const response = await fetch('/api/contact', {
@@ -47,9 +47,9 @@ export function DataNotFoundError({ licenseKey, onRetry, isRetrying = false }: D
         },
         body: JSON.stringify(formData),
       });
-      
+
       const data = await response.json();
-      
+
       if (data.success) {
         toast.success('Your message has been sent. Our support team will contact you shortly.');
         setFormData(prev => ({ ...prev, name: '', email: '' }));
@@ -79,12 +79,12 @@ export function DataNotFoundError({ licenseKey, onRetry, isRetrying = false }: D
             <div>
               <CardTitle className="text-xl text-red-700 dark:text-red-400">Dashboard Data Not Found</CardTitle>
               <CardDescription className="text-red-600/80 dark:text-red-300/80">
-                We couldn't find your dashboard data file in our system
+                We couldn&apos;t find your dashboard data file in our system
               </CardDescription>
             </div>
           </div>
         </CardHeader>
-        
+
         <CardContent className="pt-6">
           <div className="space-y-6">
             <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-md border border-amber-100 dark:border-amber-800/30">
@@ -93,15 +93,15 @@ export function DataNotFoundError({ licenseKey, onRetry, isRetrying = false }: D
                 Your dashboard data file with license key <span className="font-mono bg-amber-100 dark:bg-amber-800/50 px-1 py-0.5 rounded">{licenseKey}</span> could not be found in our storage system. This could be because:
               </p>
               <ul className="list-disc list-inside text-sm text-amber-700 dark:text-amber-200 mt-2 space-y-1">
-                <li>Your account is new and the data file hasn't been created yet</li>
+                <li>Your account is new and the data file hasn&apos;t been created yet</li>
                 <li>There was an error during the data file creation process</li>
                 <li>The data file was accidentally deleted or corrupted</li>
               </ul>
             </div>
-            
+
             <div>
               <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-3">What can you do?</h3>
-              
+
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-full">
@@ -112,8 +112,8 @@ export function DataNotFoundError({ licenseKey, onRetry, isRetrying = false }: D
                     <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
                       Sometimes this issue can be temporary. Try refreshing to see if your data becomes available.
                     </p>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       className="border-blue-200 text-blue-700 hover:bg-blue-50 dark:border-blue-800 dark:text-blue-300 dark:hover:bg-blue-900/30"
                       onClick={onRetry}
                       disabled={isRetrying}
@@ -132,7 +132,7 @@ export function DataNotFoundError({ licenseKey, onRetry, isRetrying = false }: D
                     </Button>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <div className="bg-green-100 dark:bg-green-900/30 p-2 rounded-full">
                     <Mail className="h-5 w-5 text-green-600 dark:text-green-400" />
@@ -143,8 +143,8 @@ export function DataNotFoundError({ licenseKey, onRetry, isRetrying = false }: D
                       Our support team can help resolve this issue and create your data file.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3">
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         className="border-green-200 text-green-700 hover:bg-green-50 dark:border-green-800 dark:text-green-300 dark:hover:bg-green-900/30"
                         onClick={handleMailtoClick}
                       >
@@ -159,7 +159,7 @@ export function DataNotFoundError({ licenseKey, onRetry, isRetrying = false }: D
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <div className="bg-purple-100 dark:bg-purple-900/30 p-2 rounded-full">
                     <Phone className="h-5 w-5 text-purple-600 dark:text-purple-400" />
@@ -183,7 +183,7 @@ export function DataNotFoundError({ licenseKey, onRetry, isRetrying = false }: D
             </div>
           </div>
         </CardContent>
-        
+
         <CardFooter className="flex flex-col border-t pt-6">
           <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-4 w-full">Send a Support Request</h3>
           <form onSubmit={handleSubmit} className="w-full space-y-4">
@@ -229,8 +229,8 @@ export function DataNotFoundError({ licenseKey, onRetry, isRetrying = false }: D
                 className="resize-none"
               />
             </div>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="bg-primary hover:bg-primary/90"
               disabled={isSubmitting}
             >

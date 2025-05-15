@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -8,7 +8,7 @@ const ScreenshotsSection = () => {
   const { t, language } = useLanguage();
 
   // Function to get screenshots with translated content
-  const getScreenshots = () => [
+  const getScreenshots = useCallback(() => [
     {
       id: 1,
       title: t('screenshots.pos.title'),
@@ -45,7 +45,7 @@ const ScreenshotsSection = () => {
       description: t('screenshots.kitchen.description'),
       image: "/images/screenshots/kitchen-printer-settings.png", // Screenshot showing kitchen display system
     },
-  ];
+  ], [t]);
 
   // Get screenshots with current language translations
   const screenshots = getScreenshots();
@@ -62,7 +62,7 @@ const ScreenshotsSection = () => {
     ) || updatedScreenshots[0];
 
     setSelectedScreenshot(updatedSelectedScreenshot);
-  }, [language]);
+  }, [language, getScreenshots, selectedScreenshot.id]);
 
   return (
     <section className="py-12 md:py-16 lg:py-20 bg-primary/5 dark:bg-gray-dark">

@@ -36,7 +36,14 @@ export function getGrowthIndicator(value: number) {
  */
 export function validatePhoneNumber(phoneNumber: string, countryCode?: string): boolean {
   if (!phoneNumber) return true; // Empty is valid (not required)
-  return isValidPhoneNumber(phoneNumber, countryCode);
+
+  // If countryCode is provided, create the options object
+  if (countryCode) {
+    return isValidPhoneNumber(phoneNumber, { defaultCountry: countryCode as any });
+  }
+
+  // Otherwise just validate the phone number without country code
+  return isValidPhoneNumber(phoneNumber);
 }
 
 /**
@@ -47,7 +54,8 @@ export function validatePhoneNumber(phoneNumber: string, countryCode?: string): 
 export function formatPhone(phoneNumber: string): string {
   if (!phoneNumber) return '';
   try {
-    return formatPhoneNumber(phoneNumber, 'INTERNATIONAL');
+    // The formatPhoneNumber function in newer versions only takes one argument
+    return formatPhoneNumber(phoneNumber) || phoneNumber;
   } catch (error) {
     return phoneNumber; // Return original if formatting fails
   }

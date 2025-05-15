@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { saveToken } from "@/lib/auth";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const EmailVerified = () => {
+// Component that uses searchParams
+function EmailVerifiedContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -139,6 +140,40 @@ const EmailVerified = () => {
         </div>
       </section>
     </>
+  );
+};
+
+// Loading fallback
+function EmailVerifiedLoading() {
+  return (
+    <section className="relative z-10 overflow-hidden pb-16 pt-36 md:pb-20 lg:pb-28 lg:pt-[180px]">
+      <div className="container">
+        <div className="-mx-4 flex flex-wrap">
+          <div className="w-full px-4">
+            <div className="mx-auto max-w-[500px] rounded-md bg-primary/[.03] px-6 py-10 shadow-md dark:bg-dark sm:p-[60px]">
+              <div className="mb-8 flex h-20 w-20 items-center justify-center rounded-full bg-primary bg-opacity-10 text-primary mx-auto">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              </div>
+              <h3 className="mb-3 text-center text-2xl font-bold text-black dark:text-white sm:text-3xl">
+                Email Verification
+              </h3>
+              <p className="mb-6 text-center text-base font-medium text-body-color">
+                Loading...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Main component with Suspense boundary
+const EmailVerified = () => {
+  return (
+    <Suspense fallback={<EmailVerifiedLoading />}>
+      <EmailVerifiedContent />
+    </Suspense>
   );
 };
 

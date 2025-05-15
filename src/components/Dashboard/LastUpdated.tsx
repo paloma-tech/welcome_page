@@ -16,24 +16,22 @@ export function LastUpdated({ metadata, onRefresh, isRefreshing = false }: LastU
   const { t } = useLanguage();
   const [isOnline, setIsOnline] = useState<boolean>(true);
 
-  if (!metadata || !metadata.last_updated) {
-    return null;
-  }
-
   // Format the last updated time
   let formattedTime = t('dashboard.lastUpdated.unknown');
   let lastUpdatedDate: Date | null = null;
 
-  try {
-    lastUpdatedDate = new Date(metadata.last_updated);
-    formattedTime = formatDistanceToNow(lastUpdatedDate, { addSuffix: true });
-  } catch (error) {
-    console.error('Error formatting date:', error);
+  if (metadata && metadata.last_updated) {
+    try {
+      lastUpdatedDate = new Date(metadata.last_updated);
+      formattedTime = formatDistanceToNow(lastUpdatedDate, { addSuffix: true });
+    } catch (error) {
+      console.error('Error formatting date:', error);
+    }
   }
 
   // Check if the last_updated timestamp is more than 3 minutes old
   useEffect(() => {
-    if (lastUpdatedDate) {
+    if (metadata && metadata.last_updated && lastUpdatedDate) {
       const checkConnectionStatus = () => {
         const now = new Date();
         const threeMinutesInMs = 3 * 60 * 1000;
@@ -52,7 +50,11 @@ export function LastUpdated({ metadata, onRefresh, isRefreshing = false }: LastU
       // Clean up the interval when the component unmounts
       return () => clearInterval(intervalId);
     }
-  }, [metadata.last_updated]);
+  }, [metadata, metadata?.last_updated, lastUpdatedDate]);
+
+  if (!metadata || !metadata.last_updated) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col xs:flex-row xs:items-center justify-between text-xs sm:text-sm text-muted-foreground mb-4 gap-2 xs:gap-4 bg-muted/20 p-2 sm:p-3 rounded-lg border border-stroke/10">

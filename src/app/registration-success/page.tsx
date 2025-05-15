@@ -36,10 +36,10 @@ const RegistrationSuccess = () => {
                   Your account has been created successfully.
                 </p>
                 <p className="mb-4 text-center text-base font-medium text-body-color">
-                  Please check your email to verify your account. After verification, you'll need to enter your pre-activated license key.
+                  Please check your email to verify your account. After verification, you&apos;ll need to enter your pre-activated license key.
                 </p>
                 <p className="mb-11 text-center text-base font-medium text-body-color">
-                  You must have a pre-activated license key that is not assigned to any user. If you don't have one, please contact our support team.
+                  You must have a pre-activated license key that is not assigned to any user. If you don&apos;t have one, please contact our support team.
                 </p>
                 <div className="flex justify-center">
                   <Link

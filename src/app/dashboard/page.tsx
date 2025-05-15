@@ -69,7 +69,7 @@ const Dashboard = () => {
     };
 
     fetchUserData();
-  }, [router]);
+  }, [router, t]);
 
   return (
     <>

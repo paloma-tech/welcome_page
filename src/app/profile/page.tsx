@@ -88,7 +88,7 @@ const Profile = () => {
     };
 
     fetchProfile();
-  }, [router]);
+  }, [router, t]);
 
   const validateField = (name: string, value: string) => {
     let errorMessage = "";
