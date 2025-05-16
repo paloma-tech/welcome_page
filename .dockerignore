@@ -1,0 +1,26 @@
+# Exclude development and version control files
+.git
+.github
+.vscode
+.next
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Exclude test files
+__tests__
+*.test.js
+*.spec.js
+
+# Exclude documentation
+README.md
+*.md
+
+# Exclude environment files (add your own if needed)
+.env.local
+.env.development
+.env.test
+
+# Keep production environment files
+!.env.production
