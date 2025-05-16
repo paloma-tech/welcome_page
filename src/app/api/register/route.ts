@@ -44,18 +44,9 @@ export async function POST(request: Request) {
     try {
       // Send verification email
       const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `${request.headers.get('x-forwarded-proto') || 'http'}://${request.headers.get('host')}`;
-
-      console.log('Using base URL for verification:', baseUrl);
-      console.log('Email configuration:', {
-        username: process.env.MAIL_USERNAME ? 'Set (hidden)' : 'Not set (using fallback)',
-        password: process.env.MAIL_PASSWORD ? 'Set (hidden)' : 'Not set (using fallback)',
-        from: process.env.EMAIL_FROM || '"Paloma Tech Solutions" <no-reply@palomaerp.com>',
-      });
       await sendVerificationEmail(email, verificationToken, baseUrl);
-      console.log('Verification email sent successfully to:', email);
     } catch (emailError) {
       console.error('Error sending verification email:', emailError);
-      console.error('Error details:', JSON.stringify(emailError, null, 2));
       // Continue with registration even if email fails
     }
 

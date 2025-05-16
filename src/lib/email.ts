@@ -2,12 +2,12 @@ import nodemailer from 'nodemailer';
 
 // Create a transporter using Mailjet SMTP
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'in-v3.mailjet.com',
-  port: parseInt(process.env.SMTP_PORT || '587'),
-  secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+  host: 'in-v3.mailjet.com',
+  port: 587,
+  secure: false, // true for 465, false for other ports
   auth: {
-    user: process.env.SMTP_USER || process.env.MAIL_USERNAME || 'fa1f1331116cf7bbf1aaf00e4cbd3238',
-    pass: process.env.SMTP_PASSWORD || process.env.MAIL_PASSWORD || 'b9b7701c4fbad139c63d335e1a39771e',
+    user: process.env.MAIL_USERNAME || 'fa1f1331116cf7bbf1aaf00e4cbd3238',
+    pass: process.env.MAIL_PASSWORD || 'b9b7701c4fbad139c63d335e1a39771e',
   },
 });
 
@@ -19,18 +19,6 @@ const initTransporter = async () => {
     console.log('SMTP connection verified successfully');
   } catch (error) {
     console.error('SMTP connection verification failed:', error);
-
-    // Create a safe error object for logging
-    const errorObj = {};
-    if (error instanceof Error) {
-      errorObj['name'] = error.name;
-      errorObj['message'] = error.message;
-      errorObj['stack'] = error.stack;
-    } else {
-      errorObj['error'] = String(error);
-    }
-
-    console.error('Error details:', JSON.stringify(errorObj, null, 2));
   }
 
   return transporter;
@@ -75,26 +63,11 @@ export const sendVerificationEmail = async (
   };
 
   try {
-    console.log('Attempting to send verification email to:', email);
-    console.log('Verification link:', verificationLink);
-
     const info = await transport.sendMail(mailOptions);
-    console.log('Email sent successfully: %s', info.messageId);
+    console.log('Email sent: %s', info.messageId);
     return info;
   } catch (error) {
-    console.error('Error sending verification email:', error);
-
-    // Create a safe error object for logging
-    const errorObj = {};
-    if (error instanceof Error) {
-      errorObj['name'] = error.name;
-      errorObj['message'] = error.message;
-      errorObj['stack'] = error.stack;
-    } else {
-      errorObj['error'] = String(error);
-    }
-
-    console.error('Email error details:', JSON.stringify(errorObj, null, 2));
+    console.error('Error sending email:', error);
     throw error;
   }
 };
@@ -138,26 +111,11 @@ export const sendPasswordResetEmail = async (
   };
 
   try {
-    console.log('Attempting to send password reset email to:', email);
-    console.log('Reset link:', resetLink);
-
     const info = await transport.sendMail(mailOptions);
-    console.log('Password reset email sent successfully: %s', info.messageId);
+    console.log('Email sent: %s', info.messageId);
     return info;
   } catch (error) {
-    console.error('Error sending password reset email:', error);
-
-    // Create a safe error object for logging
-    const errorObj = {};
-    if (error instanceof Error) {
-      errorObj['name'] = error.name;
-      errorObj['message'] = error.message;
-      errorObj['stack'] = error.stack;
-    } else {
-      errorObj['error'] = String(error);
-    }
-
-    console.error('Email error details:', JSON.stringify(errorObj, null, 2));
+    console.error('Error sending email:', error);
     throw error;
   }
 };
