@@ -2,18 +2,35 @@ import nodemailer from 'nodemailer';
 
 // Create a transporter using Mailjet SMTP
 const transporter = nodemailer.createTransport({
-  host: 'in-v3.mailjet.com',
-  port: 587,
-  secure: false, // true for 465, false for other ports
+  host: process.env.SMTP_HOST || 'in-v3.mailjet.com',
+  port: parseInt(process.env.SMTP_PORT || '587'),
+  secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
   auth: {
-    user: process.env.MAIL_USERNAME || 'fa1f1331116cf7bbf1aaf00e4cbd3238',
-    pass: process.env.MAIL_PASSWORD || 'b9b7701c4fbad139c63d335e1a39771e',
+    user: process.env.SMTP_USER || process.env.MAIL_USERNAME || 'fa1f1331116cf7bbf1aaf00e4cbd3238',
+    pass: process.env.SMTP_PASSWORD || process.env.MAIL_PASSWORD || 'b9b7701c4fbad139c63d335e1a39771e',
   },
 });
 
 // Initialize the transporter
 const initTransporter = async () => {
   try {
+<<<<<<< HEAD
+=======
+    // Log SMTP configuration (without sensitive data)
+    console.log('SMTP Configuration:', {
+      host: process.env.SMTP_HOST || 'in-v3.mailjet.com',
+      port: parseInt(process.env.SMTP_PORT || '587'),
+      secure: process.env.SMTP_SECURE === 'true',
+      auth: {
+        user: process.env.SMTP_USER ? 'Set (SMTP_USER)' :
+              process.env.MAIL_USERNAME ? 'Set (MAIL_USERNAME)' : 'Using fallback',
+        pass: process.env.SMTP_PASSWORD ? 'Set (SMTP_PASSWORD)' :
+              process.env.MAIL_PASSWORD ? 'Set (MAIL_PASSWORD)' : 'Using fallback',
+      },
+      from: process.env.EMAIL_FROM || '"Paloma Tech Solutions" <no-reply@palomaerp.com>',
+    });
+
+>>>>>>> parent of f47d456 (test3)
     // Verify the connection
     await transporter.verify();
     console.log('SMTP connection verified successfully');
