@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { insertUser, createVerificationToken } from '@/lib/db';
 import { sendVerificationEmail } from '@/lib/email';
 import bcrypt from 'bcryptjs';
-import { formatPhone } from '@/lib/utils';
 
 export async function POST(request: Request) {
   try {
@@ -46,8 +45,10 @@ export async function POST(request: Request) {
       const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `${request.headers.get('x-forwarded-proto') || 'http'}://${request.headers.get('host')}`;
       console.log('Using base URL for verification:', baseUrl);
       console.log('Email configuration:', {
-        username: process.env.MAIL_USERNAME ? 'Set (hidden)' : 'Not set (using fallback)',
-        password: process.env.MAIL_PASSWORD ? 'Set (hidden)' : 'Not set (using fallback)',
+        username: process.env.SMTP_USER ? 'Set (SMTP_USER)' :
+                  process.env.MAIL_USERNAME ? 'Set (MAIL_USERNAME)' : 'Not set (using fallback)',
+        password: process.env.SMTP_PASSWORD ? 'Set (SMTP_PASSWORD)' :
+                  process.env.MAIL_PASSWORD ? 'Set (MAIL_PASSWORD)' : 'Not set (using fallback)',
         from: process.env.EMAIL_FROM || '"Paloma Tech Solutions" <no-reply@palomaerp.com>',
       });
       await sendVerificationEmail(email, verificationToken, baseUrl);
