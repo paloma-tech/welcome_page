@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { insertUser, createVerificationToken } from '@/lib/db';
 import { sendVerificationEmail } from '@/lib/email';
 import bcrypt from 'bcryptjs';
+import { formatPhone } from '@/lib/utils';
 
 export async function POST(request: Request) {
   try {

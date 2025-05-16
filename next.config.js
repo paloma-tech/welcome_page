@@ -10,16 +10,6 @@ const nextConfig = {
       },
     ],
   },
-  // Disable source maps in production to reduce build size
-  productionBrowserSourceMaps: false,
-  // Optimize build output
-  swcMinify: true,
-  // Use standalone output for better compatibility with DigitalOcean
-  output: 'standalone',
-  // Increase build timeout if needed
-  experimental: {
-    serverComponentsExternalPackages: ['mysql2'],
-  },
 };
 
 module.exports = nextConfig;
