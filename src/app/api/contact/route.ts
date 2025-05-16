@@ -1,20 +1,14 @@
 import { NextResponse } from 'next/server';
 import { insertContact, initDatabase } from '@/lib/db';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 // Initialize database on first request
 let isInitialized = false;
 
-// Create a transporter using Mailjet SMTP
-const transporter = nodemailer.createTransport({
-  host: 'in-v3.mailjet.com',
-  port: 587,
-  secure: false, // true for 465, false for other ports
-  auth: {
-    user: process.env.MAIL_USERNAME || 'fa1f1331116cf7bbf1aaf00e4cbd3238',
-    pass: process.env.MAIL_PASSWORD || 'b9b7701c4fbad139c63d335e1a39771e',
-  },
-});
+// Create a Resend client with the API key
+const RESEND_API_KEY = process.env.RESEND_API_KEY || 're_VQxH8Ecy_44xGnSXuiDu48eEAVnjT5K8f';
+console.log('Contact route: Initializing Resend with API key:', RESEND_API_KEY ? 'API key is defined' : 'API key is undefined');
+const resend = new Resend(RESEND_API_KEY);
 
 export async function POST(req: Request) {
   try {
@@ -44,24 +38,8 @@ export async function POST(req: Request) {
 
     // Send email notification
     try {
-      // Prepare the email
-      const mailOptions = {
-        from: {
-          name: 'Paloma Tech Solutions',
-          address: 'dalihmeminfo@gmail.com',
-        },
-        to: 'contact@paloma.tn',
-        replyTo: data.email,
-        subject: `Support Request from ${data.name}`,
-        text: `
-Name: ${data.name}
-Email: ${data.email}
-${data.company ? `Company: ${data.company}` : ''}
-
-Message:
-${data.message}
-        `,
-        html: `
+      // Prepare the email HTML content
+      const htmlContent = `
 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
   <h2 style="color: #4a5568;">Support Request from Dashboard</h2>
 
@@ -80,12 +58,54 @@ ${data.message}
     This email was sent from the support form on the Paloma dashboard.
   </p>
 </div>
-        `,
-      };
+      `;
 
-      // Send the email
-      await transporter.sendMail(mailOptions);
-      console.log('Support request email sent successfully');
+      // Prepare the plain text content
+      const textContent = `
+Name: ${data.name}
+Email: ${data.email}
+${data.company ? `Company: ${data.company}` : ''}
+
+Message:
+${data.message}
+      `;
+
+      // Send the email using Resend
+      console.log('Attempting to send contact form email with Resend...');
+      console.log('API Key defined:', !!process.env.RESEND_API_KEY);
+      console.log('From address:', process.env.EMAIL_FROM || 'Paloma Tech Solutions <dalihmeminfo@gmail.com>');
+      console.log('To address:', 'contact@paloma.tn');
+      console.log('Reply-to:', data.email);
+
+      try {
+        // In development/testing, we can only send to dalihmem47@gmail.com
+        // In production, this restriction would be removed after domain verification
+        const toEmail = process.env.NODE_ENV === 'production' ? 'contact@paloma.tn' : 'dalihmem47@gmail.com';
+
+        const { data: emailData, error } = await resend.emails.send({
+          from: 'Paloma Tech Solutions <onboarding@resend.dev>', // Using Resend's default domain
+          to: toEmail,
+          reply_to: data.email,
+          subject: `Support Request from ${data.name}`,
+          html: htmlContent,
+          text: textContent,
+        });
+
+        if (error) {
+          console.error('Error sending support request email with Resend:', error);
+          console.error('Error details:', JSON.stringify(error, null, 2));
+        } else {
+          console.log('Contact form email sent successfully with Resend. ID:', emailData?.id);
+        }
+      } catch (resendError) {
+        console.error('Exception when sending contact form email with Resend:', resendError);
+        if (resendError instanceof Error) {
+          console.error('Error message:', resendError.message);
+          console.error('Error stack:', resendError.stack);
+        } else {
+          console.error('Unknown error type:', typeof resendError);
+        }
+      }
     } catch (emailError) {
       // Log the error but don't fail the request
       console.error('Error sending support request email:', emailError);
