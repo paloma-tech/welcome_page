@@ -14,11 +14,34 @@ const transporter = nodemailer.createTransport({
 // Initialize the transporter
 const initTransporter = async () => {
   try {
+    // Log SMTP configuration (without sensitive data)
+    console.log('SMTP Configuration:', {
+      host: 'in-v3.mailjet.com',
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.MAIL_USERNAME ? 'Set (hidden)' : 'Using fallback',
+        pass: process.env.MAIL_PASSWORD ? 'Set (hidden)' : 'Using fallback',
+      },
+    });
+
     // Verify the connection
     await transporter.verify();
     console.log('SMTP connection verified successfully');
   } catch (error) {
     console.error('SMTP connection verification failed:', error);
+
+    // Create a safe error object for logging
+    const errorObj = {};
+    if (error instanceof Error) {
+      errorObj['name'] = error.name;
+      errorObj['message'] = error.message;
+      errorObj['stack'] = error.stack;
+    } else {
+      errorObj['error'] = String(error);
+    }
+
+    console.error('Error details:', JSON.stringify(errorObj, null, 2));
   }
 
   return transporter;
@@ -63,11 +86,26 @@ export const sendVerificationEmail = async (
   };
 
   try {
+    console.log('Attempting to send verification email to:', email);
+    console.log('Verification link:', verificationLink);
+
     const info = await transport.sendMail(mailOptions);
-    console.log('Email sent: %s', info.messageId);
+    console.log('Email sent successfully: %s', info.messageId);
     return info;
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error('Error sending verification email:', error);
+
+    // Create a safe error object for logging
+    const errorObj = {};
+    if (error instanceof Error) {
+      errorObj['name'] = error.name;
+      errorObj['message'] = error.message;
+      errorObj['stack'] = error.stack;
+    } else {
+      errorObj['error'] = String(error);
+    }
+
+    console.error('Email error details:', JSON.stringify(errorObj, null, 2));
     throw error;
   }
 };
@@ -111,11 +149,26 @@ export const sendPasswordResetEmail = async (
   };
 
   try {
+    console.log('Attempting to send password reset email to:', email);
+    console.log('Reset link:', resetLink);
+
     const info = await transport.sendMail(mailOptions);
-    console.log('Email sent: %s', info.messageId);
+    console.log('Password reset email sent successfully: %s', info.messageId);
     return info;
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error('Error sending password reset email:', error);
+
+    // Create a safe error object for logging
+    const errorObj = {};
+    if (error instanceof Error) {
+      errorObj['name'] = error.name;
+      errorObj['message'] = error.message;
+      errorObj['stack'] = error.stack;
+    } else {
+      errorObj['error'] = String(error);
+    }
+
+    console.error('Email error details:', JSON.stringify(errorObj, null, 2));
     throw error;
   }
 };
