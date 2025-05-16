@@ -10,10 +10,6 @@ const nextConfig = {
       },
     ],
   },
-  // Add output configuration for static exports
-  output: 'standalone',
-  // Disable source maps in production to reduce bundle size
-  productionBrowserSourceMaps: false,
 };
 
 module.exports = nextConfig;
