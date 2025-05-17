@@ -75,7 +75,7 @@ ${data.message}
       console.log('API Key defined:', !!process.env.RESEND_API_KEY);
       console.log('From address:', process.env.EMAIL_FROM || 'Paloma Tech Solutions <dalihmeminfo@gmail.com>');
       console.log('To address:', 'contact@paloma.tn');
-      console.log('Reply-to:', data.email);
+      console.log('ReplyTo:', data.email);
 
       try {
         // In development/testing, we can only send to dalihmem47@gmail.com
@@ -85,7 +85,7 @@ ${data.message}
         const { data: emailData, error } = await resend.emails.send({
           from: 'Paloma Tech Solutions <onboarding@resend.dev>', // Using Resend's default domain
           to: toEmail,
-          reply_to: data.email,
+          replyTo: data.email,
           subject: `Support Request from ${data.name}`,
           html: htmlContent,
           text: textContent,
