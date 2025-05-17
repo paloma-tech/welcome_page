@@ -44,12 +44,30 @@ export async function POST(request: Request) {
     // In production, always use the NEXT_PUBLIC_APP_URL from environment
     // In development, fallback to constructing from headers
     let baseUrl = '';
-    if (process.env.NODE_ENV === 'production') {
-      baseUrl = process.env.NEXT_PUBLIC_APP_URL || '';
-      console.log('Using production base URL from env:', baseUrl);
-    } else {
-      baseUrl = `${request.headers.get('x-forwarded-proto') || 'http'}://${request.headers.get('host')}`;
-      console.log('Using development base URL from headers:', baseUrl);
+
+    // First try to get from environment variable
+    if (process.env.NEXT_PUBLIC_APP_URL) {
+      baseUrl = process.env.NEXT_PUBLIC_APP_URL;
+      console.log('Using APP_URL from environment:', baseUrl);
+    }
+    // If not available, construct from request headers
+    else {
+      const host = request.headers.get('host') || 'www.paloma.tn';
+      const proto = request.headers.get('x-forwarded-proto') || 'https';
+      baseUrl = `${proto}://${host}`;
+      console.log('Constructed base URL from headers:', baseUrl);
+    }
+
+    // Ensure the baseUrl has a protocol
+    if (!baseUrl.startsWith('http')) {
+      baseUrl = `https://${baseUrl}`;
+      console.log('Added https protocol to base URL:', baseUrl);
+    }
+
+    // Ensure the baseUrl doesn't have a trailing slash
+    if (baseUrl.endsWith('/')) {
+      baseUrl = baseUrl.slice(0, -1);
+      console.log('Removed trailing slash from base URL:', baseUrl);
     }
 
     console.log('Final base URL for verification email:', baseUrl);

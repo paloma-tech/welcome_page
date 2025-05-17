@@ -33,7 +33,33 @@ export async function GET(request: Request) {
       }
 
       // Redirect to a special verification success page with the token
-      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `${request.headers.get('x-forwarded-proto') || 'http'}://${request.headers.get('host')}`;
+      let baseUrl = '';
+
+      // First try to get from environment variable
+      if (process.env.NEXT_PUBLIC_APP_URL) {
+        baseUrl = process.env.NEXT_PUBLIC_APP_URL;
+        console.log('Using APP_URL from environment for redirect:', baseUrl);
+      }
+      // If not available, construct from request headers
+      else {
+        const host = request.headers.get('host') || 'www.paloma.tn';
+        const proto = request.headers.get('x-forwarded-proto') || 'https';
+        baseUrl = `${proto}://${host}`;
+        console.log('Constructed base URL from headers for redirect:', baseUrl);
+      }
+
+      // Ensure the baseUrl has a protocol
+      if (!baseUrl.startsWith('http')) {
+        baseUrl = `https://${baseUrl}`;
+        console.log('Added https protocol to base URL for redirect:', baseUrl);
+      }
+
+      // Ensure the baseUrl doesn't have a trailing slash
+      if (baseUrl.endsWith('/')) {
+        baseUrl = baseUrl.slice(0, -1);
+      }
+
+      console.log('Final base URL for redirect:', baseUrl);
       const successUrl = new URL(`/email-verified?token=${tokenResult.token}`, baseUrl);
       return NextResponse.redirect(successUrl);
     } else {

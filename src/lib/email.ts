@@ -20,10 +20,25 @@ export const sendVerificationEmail = async (
   token: string,
   baseUrl: string
 ) => {
-  // Make sure the baseUrl doesn't have a trailing slash before adding the path
-  const fullVerificationLink = baseUrl.endsWith('/')
-    ? `${baseUrl}api/verify-email?token=${token}`
-    : `${baseUrl}/api/verify-email?token=${token}`;
+  // Ensure the baseUrl is a complete URL with domain
+  let processedBaseUrl = baseUrl;
+
+  // If baseUrl is empty or doesn't start with http, use a default
+  if (!processedBaseUrl || !processedBaseUrl.startsWith('http')) {
+    processedBaseUrl = 'https://www.paloma.tn';
+    console.log('Using default domain for verification link:', processedBaseUrl);
+  }
+
+  // Remove trailing slash if present
+  if (processedBaseUrl.endsWith('/')) {
+    processedBaseUrl = processedBaseUrl.slice(0, -1);
+  }
+
+  // Construct the full verification link
+  const fullVerificationLink = `${processedBaseUrl}/api/verify-email?token=${token}`;
+
+  console.log('Processed base URL:', processedBaseUrl);
+  console.log('Full verification link:', fullVerificationLink);
 
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
@@ -127,10 +142,25 @@ export const sendPasswordResetEmail = async (
   token: string,
   baseUrl: string
 ) => {
-  // Make sure the baseUrl doesn't have a trailing slash before adding the path
-  const fullResetLink = baseUrl.endsWith('/')
-    ? `${baseUrl}reset-password?token=${token}`
-    : `${baseUrl}/reset-password?token=${token}`;
+  // Ensure the baseUrl is a complete URL with domain
+  let processedBaseUrl = baseUrl;
+
+  // If baseUrl is empty or doesn't start with http, use a default
+  if (!processedBaseUrl || !processedBaseUrl.startsWith('http')) {
+    processedBaseUrl = 'https://www.paloma.tn';
+    console.log('Using default domain for reset link:', processedBaseUrl);
+  }
+
+  // Remove trailing slash if present
+  if (processedBaseUrl.endsWith('/')) {
+    processedBaseUrl = processedBaseUrl.slice(0, -1);
+  }
+
+  // Construct the full reset link
+  const fullResetLink = `${processedBaseUrl}/reset-password?token=${token}`;
+
+  console.log('Processed base URL for reset:', processedBaseUrl);
+  console.log('Full reset link:', fullResetLink);
 
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
