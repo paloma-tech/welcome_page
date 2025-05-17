@@ -20,7 +20,10 @@ export const sendVerificationEmail = async (
   token: string,
   baseUrl: string
 ) => {
-  const verificationLink = `${baseUrl}/api/verify-email?token=${token}`;
+  // Make sure the baseUrl doesn't have a trailing slash before adding the path
+  const fullVerificationLink = baseUrl.endsWith('/')
+    ? `${baseUrl}api/verify-email?token=${token}`
+    : `${baseUrl}/api/verify-email?token=${token}`;
 
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
@@ -31,10 +34,10 @@ export const sendVerificationEmail = async (
         <h2 style="color: #333; margin-top: 0;">Verify Your Email Address</h2>
         <p style="color: #555; line-height: 1.5;">Thank you for registering with PalomaERP. To complete your registration and access your dashboard, please verify your email address by clicking the button below:</p>
         <div style="text-align: center; margin: 30px 0;">
-          <a href="${verificationLink}" style="background-color: #4A6CF7; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">Verify Email</a>
+          <a href="${fullVerificationLink}" style="background-color: #4A6CF7; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">Verify Email</a>
         </div>
         <p style="color: #555; line-height: 1.5;">If the button doesn't work, you can also click on the link below or copy and paste it into your browser:</p>
-        <p style="word-break: break-all;"><a href="${verificationLink}" style="color: #4A6CF7;">${verificationLink}</a></p>
+        <p style="word-break: break-all;"><a href="${fullVerificationLink}" style="color: #4A6CF7;">${fullVerificationLink}</a></p>
         <p style="color: #555; line-height: 1.5;">This link will expire in 24 hours.</p>
         <p style="color: #555; line-height: 1.5;">If you did not create an account, please ignore this email.</p>
       </div>
@@ -51,7 +54,7 @@ export const sendVerificationEmail = async (
     console.log('From address:', process.env.EMAIL_FROM || 'PalomaERP <onboarding@resend.dev>');
     console.log('To address:', email);
     console.log('Base URL:', baseUrl);
-    console.log('Verification link:', verificationLink);
+    console.log('Verification link:', fullVerificationLink);
 
     // Always send to the actual recipient email
     const toEmail = email;
@@ -62,7 +65,7 @@ export const sendVerificationEmail = async (
     // Prepare email data with explicit values to avoid undefined
     const fromEmail = process.env.EMAIL_FROM || 'PalomaERP <onboarding@resend.dev>';
     const emailSubject = 'Verify Your Email Address - PalomaERP';
-    const textContent = `Please verify your email address by clicking on the following link: ${verificationLink}`;
+    const textContent = `Please verify your email address by clicking on the following link: ${fullVerificationLink}`;
 
     console.log('Email parameters:');
     console.log('- From:', fromEmail);
@@ -124,7 +127,10 @@ export const sendPasswordResetEmail = async (
   token: string,
   baseUrl: string
 ) => {
-  const resetLink = `${baseUrl}/reset-password?token=${token}`;
+  // Make sure the baseUrl doesn't have a trailing slash before adding the path
+  const fullResetLink = baseUrl.endsWith('/')
+    ? `${baseUrl}reset-password?token=${token}`
+    : `${baseUrl}/reset-password?token=${token}`;
 
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
@@ -135,10 +141,10 @@ export const sendPasswordResetEmail = async (
         <h2 style="color: #333; margin-top: 0;">Reset Your Password</h2>
         <p style="color: #555; line-height: 1.5;">You requested to reset your password. Please click the button below to set a new password:</p>
         <div style="text-align: center; margin: 30px 0;">
-          <a href="${resetLink}" style="background-color: #4A6CF7; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">Reset Password</a>
+          <a href="${fullResetLink}" style="background-color: #4A6CF7; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">Reset Password</a>
         </div>
         <p style="color: #555; line-height: 1.5;">If the button doesn't work, you can also click on the link below or copy and paste it into your browser:</p>
-        <p style="word-break: break-all;"><a href="${resetLink}" style="color: #4A6CF7;">${resetLink}</a></p>
+        <p style="word-break: break-all;"><a href="${fullResetLink}" style="color: #4A6CF7;">${fullResetLink}</a></p>
         <p style="color: #555; line-height: 1.5;">This link will expire in 1 hour.</p>
         <p style="color: #555; line-height: 1.5;">If you did not request a password reset, please ignore this email.</p>
       </div>
@@ -166,7 +172,7 @@ export const sendPasswordResetEmail = async (
       to: toEmail,
       subject: 'Reset Your Password - PalomaERP',
       html: htmlContent,
-      text: `Please reset your password by clicking on the following link: ${resetLink}`,
+      text: `Please reset your password by clicking on the following link: ${fullResetLink}`,
     });
 
     if (error) {
