@@ -44,12 +44,15 @@ export const sendVerificationEmail = async (
     console.log('From address:', process.env.EMAIL_FROM || 'PalomaERP <dalihmeminfo@gmail.com>');
     console.log('To address:', email);
 
-    // In development/testing, we can only send to dalihmem47@gmail.com
-    // In production, this restriction would be removed after domain verification
-    const toEmail = process.env.NODE_ENV === 'production' ? email : 'dalihmem47@gmail.com';
+    // Always send to the actual recipient email in production
+    // In development, we can redirect to a test email if needed
+    const toEmail = email;
+
+    console.log('Sending verification email to:', toEmail);
+    console.log('NODE_ENV:', process.env.NODE_ENV);
 
     const { data, error } = await resend.emails.send({
-      from: 'PalomaERP <onboarding@resend.dev>', // Using Resend's default domain
+      from: process.env.EMAIL_FROM || 'PalomaERP <onboarding@resend.dev>', // Use configured from address
       to: toEmail,
       subject: 'Verify Your Email Address - PalomaERP',
       html: htmlContent,
@@ -112,12 +115,15 @@ export const sendPasswordResetEmail = async (
     console.log('From address:', process.env.EMAIL_FROM || 'PalomaERP <dalihmeminfo@gmail.com>');
     console.log('To address:', email);
 
-    // In development/testing, we can only send to dalihmem47@gmail.com
-    // In production, this restriction would be removed after domain verification
-    const toEmail = process.env.NODE_ENV === 'production' ? email : 'dalihmem47@gmail.com';
+    // Always send to the actual recipient email in production
+    // In development, we can redirect to a test email if needed
+    const toEmail = email;
+
+    console.log('Sending password reset email to:', toEmail);
+    console.log('NODE_ENV:', process.env.NODE_ENV);
 
     const { data, error } = await resend.emails.send({
-      from: 'PalomaERP <onboarding@resend.dev>', // Using Resend's default domain
+      from: process.env.EMAIL_FROM || 'PalomaERP <onboarding@resend.dev>', // Use configured from address
       to: toEmail,
       subject: 'Reset Your Password - PalomaERP',
       html: htmlContent,

@@ -44,10 +44,22 @@ export async function POST(request: Request) {
     try {
       // Send verification email
       const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `${request.headers.get('x-forwarded-proto') || 'http'}://${request.headers.get('host')}`;
+      console.log('Using base URL for verification email:', baseUrl);
+      console.log('NODE_ENV:', process.env.NODE_ENV);
+      console.log('RESEND_API_KEY defined:', !!process.env.RESEND_API_KEY);
+      console.log('EMAIL_FROM:', process.env.EMAIL_FROM);
+
       await sendVerificationEmail(email, verificationToken, baseUrl);
+      console.log('Verification email sent successfully to:', email);
     } catch (emailError) {
       console.error('Error sending verification email:', emailError);
-      // Continue with registration even if email fails
+      if (emailError instanceof Error) {
+        console.error('Error message:', emailError.message);
+        console.error('Error stack:', emailError.stack);
+      } else {
+        console.error('Unknown error type:', typeof emailError);
+      }
+      // Continue with registration even if email fails, but log detailed error information
     }
 
     return NextResponse.json(
