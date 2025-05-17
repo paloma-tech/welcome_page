@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { insertUser, createVerificationToken } from '@/lib/db';
 import { sendVerificationEmail } from '@/lib/email';
 import bcrypt from 'bcryptjs';
-import { formatPhone } from '@/lib/utils';
 
 export async function POST(request: Request) {
   try {
@@ -41,14 +40,41 @@ export async function POST(request: Request) {
     const userId = result.insertId;
     const verificationToken = await createVerificationToken(userId);
 
+    // Construct the base URL for verification link
+    // In production, always use the NEXT_PUBLIC_APP_URL from environment
+    // In development, fallback to constructing from headers
+    let baseUrl = '';
+    if (process.env.NODE_ENV === 'production') {
+      baseUrl = process.env.NEXT_PUBLIC_APP_URL || '';
+      console.log('Using production base URL from env:', baseUrl);
+    } else {
+      baseUrl = `${request.headers.get('x-forwarded-proto') || 'http'}://${request.headers.get('host')}`;
+      console.log('Using development base URL from headers:', baseUrl);
+    }
+
+    console.log('Final base URL for verification email:', baseUrl);
+    console.log('NODE_ENV:', process.env.NODE_ENV);
+    console.log('RESEND_API_KEY defined:', !!process.env.RESEND_API_KEY);
+    console.log('EMAIL_FROM:', process.env.EMAIL_FROM);
+    console.log('Request headers:', {
+      host: request.headers.get('host'),
+      'x-forwarded-proto': request.headers.get('x-forwarded-proto'),
+      'x-forwarded-host': request.headers.get('x-forwarded-host'),
+      'x-real-ip': request.headers.get('x-real-ip'),
+    });
+
+    // Log all environment variables (excluding sensitive ones)
+    console.log('Environment variables:');
+    Object.keys(process.env).forEach(key => {
+      if (!key.includes('PASSWORD') && !key.includes('SECRET') && !key.includes('KEY')) {
+        console.log(`${key}: ${process.env[key]}`);
+      } else {
+        console.log(`${key}: [REDACTED]`);
+      }
+    });
+
     try {
       // Send verification email
-      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `${request.headers.get('x-forwarded-proto') || 'http'}://${request.headers.get('host')}`;
-      console.log('Using base URL for verification email:', baseUrl);
-      console.log('NODE_ENV:', process.env.NODE_ENV);
-      console.log('RESEND_API_KEY defined:', !!process.env.RESEND_API_KEY);
-      console.log('EMAIL_FROM:', process.env.EMAIL_FROM);
-
       await sendVerificationEmail(email, verificationToken, baseUrl);
       console.log('Verification email sent successfully to:', email);
     } catch (emailError) {
@@ -59,7 +85,10 @@ export async function POST(request: Request) {
       } else {
         console.error('Unknown error type:', typeof emailError);
       }
-      // Continue with registration even if email fails, but log detailed error information
+
+      // Log the error but continue with registration
+      // In a production environment, we might want to notify admins about this issue
+      console.error('Registration completed but verification email failed to send');
     }
 
     return NextResponse.json(

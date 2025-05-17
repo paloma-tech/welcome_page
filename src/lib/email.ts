@@ -3,6 +3,12 @@ import { Resend } from 'resend';
 // Create a Resend client with the API key
 const RESEND_API_KEY = process.env.RESEND_API_KEY || 're_VQxH8Ecy_44xGnSXuiDu48eEAVnjT5K8f';
 console.log('Initializing Resend with API key:', RESEND_API_KEY ? 'API key is defined' : 'API key is undefined');
+console.log('Environment variables:');
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('NEXT_PUBLIC_APP_URL:', process.env.NEXT_PUBLIC_APP_URL);
+console.log('EMAIL_FROM:', process.env.EMAIL_FROM);
+
+// Initialize Resend with explicit API key to ensure it's properly set
 const resend = new Resend(RESEND_API_KEY);
 
 // Log that we're using Resend
@@ -41,32 +47,65 @@ export const sendVerificationEmail = async (
   try {
     console.log('Attempting to send verification email with Resend...');
     console.log('API Key defined:', !!process.env.RESEND_API_KEY);
-    console.log('From address:', process.env.EMAIL_FROM || 'PalomaERP <dalihmeminfo@gmail.com>');
+    console.log('API Key value (first 4 chars):', RESEND_API_KEY ? RESEND_API_KEY.substring(0, 4) + '...' : 'undefined');
+    console.log('From address:', process.env.EMAIL_FROM || 'PalomaERP <onboarding@resend.dev>');
     console.log('To address:', email);
+    console.log('Base URL:', baseUrl);
+    console.log('Verification link:', verificationLink);
 
-    // Always send to the actual recipient email in production
-    // In development, we can redirect to a test email if needed
+    // Always send to the actual recipient email
     const toEmail = email;
 
     console.log('Sending verification email to:', toEmail);
     console.log('NODE_ENV:', process.env.NODE_ENV);
 
-    const { data, error } = await resend.emails.send({
-      from: process.env.EMAIL_FROM || 'PalomaERP <onboarding@resend.dev>', // Use configured from address
-      to: toEmail,
-      subject: 'Verify Your Email Address - PalomaERP',
-      html: htmlContent,
-      text: `Please verify your email address by clicking on the following link: ${verificationLink}`,
-    });
+    // Prepare email data with explicit values to avoid undefined
+    const fromEmail = process.env.EMAIL_FROM || 'PalomaERP <onboarding@resend.dev>';
+    const emailSubject = 'Verify Your Email Address - PalomaERP';
+    const textContent = `Please verify your email address by clicking on the following link: ${verificationLink}`;
 
-    if (error) {
-      console.error('Error sending email with Resend:', error);
-      console.error('Error details:', JSON.stringify(error, null, 2));
-      throw error;
+    console.log('Email parameters:');
+    console.log('- From:', fromEmail);
+    console.log('- To:', toEmail);
+    console.log('- Subject:', emailSubject);
+
+    try {
+      const { data, error } = await resend.emails.send({
+        from: fromEmail,
+        to: toEmail,
+        subject: emailSubject,
+        html: htmlContent,
+        text: textContent,
+      });
+
+      if (error) {
+        console.error('Error sending email with Resend:', error);
+        console.error('Error details:', JSON.stringify(error, null, 2));
+
+        // Log specific error information
+        console.error('Error object properties:', Object.keys(error));
+
+        // Access properties safely
+        if ((error as any).statusCode) {
+          console.error('Status code:', (error as any).statusCode);
+        }
+        if (error.message) {
+          console.error('Error message:', error.message);
+        }
+
+        throw error;
+      }
+
+      console.log('Email sent successfully with Resend. ID:', data?.id);
+      return data;
+    } catch (sendError) {
+      console.error('Error in Resend.send() call:', sendError);
+      if (sendError instanceof Error) {
+        console.error('Send error message:', sendError.message);
+        console.error('Send error stack:', sendError.stack);
+      }
+      throw sendError;
     }
-
-    console.log('Email sent successfully with Resend. ID:', data?.id);
-    return data;
   } catch (error) {
     console.error('Exception when sending email with Resend:', error);
     if (error instanceof Error) {
