@@ -29,16 +29,16 @@ export function LastUpdated({ metadata, onRefresh, isRefreshing = false }: LastU
     }
   }
 
-  // Check if the last_updated timestamp is more than 3 minutes old
+  // Check if the last_updated timestamp is more than 5 minutes old
   useEffect(() => {
     if (metadata && metadata.last_updated && lastUpdatedDate) {
       const checkConnectionStatus = () => {
         const now = new Date();
-        const threeMinutesInMs = 3 * 60 * 1000;
+        const fiveMinutesInMs = 5 * 60 * 1000;
         const timeDifference = now.getTime() - lastUpdatedDate.getTime();
 
-        // If the last update was more than 3 minutes ago, set status to offline
-        setIsOnline(timeDifference <= threeMinutesInMs);
+        // If the last update was more than 5 minutes ago, set status to offline
+        setIsOnline(timeDifference <= fiveMinutesInMs);
       };
 
       // Check immediately
